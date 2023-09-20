@@ -11,22 +11,37 @@ function Login() {
 		const urlParams = new URLSearchParams(queryString);
 		const codeParam = urlParams.get('code');
 
-		// TODO dont use local storage to make this more secure
-		if(codeParam && (localStorage.getItem("accessToken") === null)){
-			const getAccessToken = async () => {
+		const fetchUserData = async () => {
+
+		}
+
+		const getAccessToken = async (codeParam: String) => {
+			try {
 				await fetch("http://localhost:4000/getAccessToken?code=" + codeParam, {
-					method: "GET"
+					method: "POST",
+					credentials: 'include'
+				})
+
+				await fetch("http://localhost:4000/getUserData", {
+					method: "GET",
+					credentials: 'include'
+
 				}).then((response) => {
 					return response.json()
-				}).then((data) => {
-					console.log(data)
+				}).then((response) => {
 
-					if(data.access_token){
-						localStorage.setItem("accessToken", data.access_token)
-					}
+					console.log(response)
 				})
+			}catch(err){
+				console.log('error!?')
+				console.error(err)
 			}
-			getAccessToken()
+
+		}
+
+		if(codeParam){
+			console.log('code param found, getting access token cookie')
+			getAccessToken(codeParam)
 		}
 
 	}, [])

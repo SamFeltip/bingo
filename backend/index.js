@@ -1,63 +1,66 @@
 const express = require('express')
 const cors = require('cors')
-const jwt = require('jsonwebtoken');
 const axios = require('axios')
-const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser');
+
 
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
-const createToken = (id) => {
-    return jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: '3d'})
-}
 
-const app = express()
+const app = express();
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors({
+    origin: process.env.CLIENT_URL,  // Allow CORS from your client's origin
+    credentials: true  // Allow cookies to be included in requests
+}));
 
-app.use(cors())
-app.use(bodyParser.json())
 
 const userRoutes = require('./routes/userRoutes');
 app.use('/users', userRoutes);
 
-app.get('/getAccessToken', async (req, res) => {
+app.post('/getAccessToken', async (req, res) => {
+    try {
+        console.log('get access token running')
+        const response = await axios.post("https://github.com/login/oauth/access_token", {
+            client_id: process.env.GITHUB_CLIENT_ID,
+            client_secret: process.env.GITHUB_CLIENT_SECRET,
+            code: req.query.code,
+        }, {
+            headers: {
+                accept: 'application/json',
+            },
+        })
 
-    console.log(req.query.code);
-    const params = "?client_id=" + process.env.GITHUB_CLIENT_ID + "&client_secret=" + process.env.GITHUB_CLIENT_SECRET + "&code=" + req.query.code;
+        const {access_token} = response.data;
+        console.log({access_token})
 
-    await axios("https://github.com/login/oauth/access_token" + params, {
-        method: "POST",
-        headers: {
-            "Accept": "application/json"
-        }
-    }).then((response) => {
+        res.cookie('session', access_token, { httpOnly: true, secure: true, sameSite: 'none' });
+        res.status(200).send({ message: 'Access token cookie created' });
 
-        if(response.data.error){
-            throw Error(response.data.error)
-        }
-
-        console.log(response.data)
-        res.json(response.data)
-
-
-    }).catch(error => {
-        console.log(error.message)
-
-        res.json({error: "an error occurred"})
-    })
-})
+    } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+        res.status(500).send({ message: 'Error fetching access token' });
+    }
+});
 
 app.get('/getUserData', async (req, res) => {
+    console.log('responding to getUserData')
+    console.log(req.cookies)
+    const token = req.cookies.session
 
     await axios("https://api.github.com/user", {
         method: "GET",
         headers: {
-            "Authorization": req.get("Authorization")
+            "Authorization": `token ${token}`
         }
     }).then((response) => {
-        return response.json();
-    }).then((data) => {
-        console.log(data)
-        res.json(data)
+        console.log(response.data)
+        res.json({success: true, data: response.data})
+    }).catch((error) => {
+        console.error(error.message)
+        res.json({success: false, data: error})
     })
 })
 
@@ -85,7 +88,7 @@ app.get('/home', (req, res) => {
 	})
 })
 
-const port = process.env.PORT || '4040';
+const port = process.env.PORT || '4000';
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
 });
