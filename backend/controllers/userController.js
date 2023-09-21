@@ -1,3 +1,4 @@
+const axios = require("axios");
 pool = require("../database");
 
 exports.getUser = (req, res) => {
@@ -25,13 +26,35 @@ exports.getUserById = (request, response) => {
     })
 }
 
-exports.createUser = (request, response) => {
-    const { name, email, image } = request.body
+exports.createUser = async (req, res) => {
+    try{
+        const { email } = req.body
 
-    pool.query('INSERT INTO users (name, email, image) VALUES ($1, $2, $3) RETURNING *', [name, email, image], (error, results) => {
-        if (error) {
-            throw error
+        const token = req.cookies.session
+
+        if(token){
+            console.log({token})
         }
-        response.status(201).send(`User added with ID: ${results.rows[0].id}`)
-    })
+
+        const user_response = await axios.get("https://api.github.com/user", {
+            headers: {
+                "Authorization": `token ${token}`
+            }
+        })
+
+        const {name, avatar_url} = user_response.data
+
+        console.log({name})
+
+        pool.query('INSERT INTO users (name, email, image) VALUES ($1, $2, $3) RETURNING *', [name, email, avatar_url], (error, results) => {
+            if (error) {
+                throw error
+            }
+            res.status(200).json({new_user: results.rows[0]})
+        })
+    }catch(err){
+        console.error(err)
+        res.status(400).send(err.message)
+    }
+
 }
