@@ -3,3 +3,6 @@
 /backend/node_modules/
 /client/.env.local
 /backend/.env
+/backend/keytmp.pem
+/backend/key.pem
+/backend/cert.pem

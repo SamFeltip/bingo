@@ -1,10 +1,11 @@
 import {useNavigate} from "react-router-dom";
 import React from "react";
-import login from "../pages/Login";
+import {useAuthContext} from "../hooks/useAuthContext";
 
 export function Header() {
 
 	const navigate = useNavigate();
+	const { user } = useAuthContext();
 
 	const login_button = (
 		<button onClick={() => navigate('/login')}>
@@ -13,7 +14,12 @@ export function Header() {
 	)
 
 	const user_logo = (
-		<button onClick={() => {localStorage.removeItem('accessToken')}}>Log Out</button>
+		<div className={'flex gap-4'}>
+			<img src={user?.image} className={'w-[40px] rounded-full'} alt={'profile'}/>
+
+			<button onClick={() => {}}>Log Out
+			</button>
+		</div>
 	)
 
 	return <div>
@@ -23,12 +29,12 @@ export function Header() {
 				Bingo!
 			</button>
 
-			{
-				localStorage.getItem("accessToken")
-				? user_logo
-				: login_button
-			}
-
+			<div>
+				{user
+					? user_logo
+					: login_button
+				}
+			</div>
 
 
 		</div>

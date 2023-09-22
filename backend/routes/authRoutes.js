@@ -1,19 +1,19 @@
 const axios = require("axios");
 const express = require("express");
 const router = express.Router();
-pool = require("../database");
-userHelper = require("../helpers/userHelper");
+const userHelper = require("../helpers/userHelper");
+
+router.get('/', (req, res) => {
+    res.send('auth root')
+})
 
 router.post('/getAccessToken', async (req, res) => {
 
     try {
-        console.log('get access token running')
 
         if(!req.query?.code){
             res.status(200).send({ success: false, data: 'no code given' });
         }
-
-        console.log('oauth code exists')
 
         const response = await axios.post("https://github.com/login/oauth/access_token", {
             client_id: process.env.GITHUB_CLIENT_ID,
@@ -25,16 +25,15 @@ router.post('/getAccessToken', async (req, res) => {
             },
         })
 
-        console.log('github oauth completed')
         const {access_token} = response.data;
-
-        console.log({access_token})
 
         if(!access_token){
             res.status(200).send({ success: false, data: 'no access token given. code may have been invalid' });
         }else{
-            res.cookie('session', access_token, { httpOnly: true, secure: true, sameSite: 'none' });
-            res.status(200).send({ message: 'Access token cookie created' });
+            res
+                .status(200)
+                .cookie('oauth_access_token', access_token, { httpOnly: true, secure: true, sameSite: 'none' })
+                .json({ message: 'Access token cookie created' });
         }
 
 
@@ -44,26 +43,34 @@ router.post('/getAccessToken', async (req, res) => {
     }
 });
 
+
+
 router.get('/getUserData', async (req, res) => {
-    console.log('responding to getUserData')
-    console.log(req.cookies)
-    const token = req.cookies.session
+    const oauth_access_token = req.cookies.oauth_access_token
 
     try{
+        if(oauth_access_token){
+            const primary_email = await userHelper.getUsersPrimaryEmailFromGitHub(oauth_access_token)
+            const user = await userHelper.getUserByEmail(primary_email.email)
 
-        const email_response = await axios.get("https://api.github.com/user/public_emails", {
-            headers: {
-                "Authorization": `token ${token}`
+            let current_user = {
+                id: user?.id,
+                name: user?.name,
+                image: user?.image,
+                email: primary_email.email
             }
-        })
 
-        const primary_email = email_response.data.filter((email) => email.primary === true)[0]
+            const USER_ACCOUNT_EXISTS = user?.id
+            if (USER_ACCOUNT_EXISTS){
+                const session_token = userHelper.createToken(user.id)
+                res.cookie('session', session_token, { httpOnly: true, secure: true, sameSite: 'none' });
+            }
 
-        console.log({primary_email})
+            res.status(200).json({success: true, data: {current_user}})
+        }else{
+            res.status(400).json({success: false, data: {message: 'no oauth cookie found in request'}})
+        }
 
-        const users = await userHelper.getUsersWithEmail(primary_email.email)
-        let current_user = users[0] || {email: primary_email.email}
-        res.status(200).json({success: true, data: {current_user}})
 
     }catch(error) {
         console.error(error.message)

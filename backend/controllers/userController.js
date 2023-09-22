@@ -1,4 +1,5 @@
 const axios = require("axios");
+const userHelper = require("../helpers/userHelper");
 pool = require("../database");
 
 exports.getUser = (req, res) => {
@@ -30,11 +31,7 @@ exports.createUser = async (req, res) => {
     try{
         const { email } = req.body
 
-        const token = req.cookies.session
-
-        if(token){
-            console.log({token})
-        }
+        const token = req.cookies.oauth_access_token
 
         const user_response = await axios.get("https://api.github.com/user", {
             headers: {
@@ -44,13 +41,18 @@ exports.createUser = async (req, res) => {
 
         const {name, avatar_url} = user_response.data
 
-        console.log({name})
-
         pool.query('INSERT INTO users (name, email, image) VALUES ($1, $2, $3) RETURNING *', [name, email, avatar_url], (error, results) => {
             if (error) {
                 throw error
             }
-            res.status(200).json({new_user: results.rows[0]})
+
+            const {id} = results.rows[0]
+
+            //     create JWT for authentication between client and server
+            const session_token = userHelper.createToken(id)
+            res.cookie('session', session_token, { httpOnly: true, secure: true, sameSite: 'none' });
+
+            res.status(200).json({new_user: {id, name, image: avatar_url, email}})
         })
     }catch(err){
         console.error(err)

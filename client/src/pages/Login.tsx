@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from "react";
+import {useAuthContext} from "../hooks/useAuthContext";
+import { useSignup } from "../hooks/useSignup";
 
 function Login() {
 	const [bannerMessage, setBannerMessage] = useState('')
+	const {dispatch} = useAuthContext()
+	const {signup, error, isLoading} = useSignup()
 
 	const loginWithGithub = () => {
 		window.location.assign("https://github.com/login/oauth/authorize?client_id=" + process.env.REACT_APP_GITHUB_CLIENT_ID)
@@ -15,44 +19,35 @@ function Login() {
 		const getAccessToken = async (codeParam: String) => {
 			try {
 
-				const accessTokenResponse = await fetch("http://localhost:4000/auth/getAccessToken?code=" + codeParam, {
-					method: "POST"
+				await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/getAccessToken?code=` + codeParam, {
+					method: "POST",
+					credentials: 'include'
 				})
 
-				const get_user_data_response = await fetch("http://localhost:4000/auth/getUserData", {
+				const get_user_data_response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/getUserData`, {
 					method: "GET",
 					credentials: 'include'
-
 				}).then((response) => {
 					return response.json()
 				})
 
 				if(!get_user_data_response.success){
-					console.log(get_user_data_response)
+					setBannerMessage(get_user_data_response.data)
 				}else{
 					let {current_user} = get_user_data_response.data
 
 					if(!current_user.id){
-						setBannerMessage('no user exists yet!')
+						setBannerMessage('creating new account...')
+						await signup(current_user.email)
 
-						fetch("http://localhost:4000/users/", {
-							method: "POST",
-							credentials: 'include',
-							headers: {
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify({ email: current_user.email }),
-						}).then(res => {
-							console.log('completed createUser')
-							console.log(res)
-
-							alert(`welcome, ${current_user.name}!`)
-							console.log(current_user)
-						})
 					}else{
 
-						alert(`welcome back, ${current_user.name}!`)
-						console.log(current_user)
+						dispatch({
+							type: 'LOGIN',
+							payload: current_user
+						})
+
+						localStorage.setItem("current_user", JSON.stringify(current_user))
 						window.location.replace('/')
 					}
 
@@ -76,13 +71,14 @@ function Login() {
 		<div className="flex text-center flex-col items-center py-[150px]">
 			<div>
 				{bannerMessage}
+				{error}
 			</div>
 			<div className={'w-[200px] border-2 border-gray-500 rounded-md p-5'}>
 				<h1 className={'font-bold text-lg pb-[50px]'}>
 					Log in or Sign up
 				</h1>
 
-				<button onClick={loginWithGithub} className={'border-2 border-black rounded-md p-2'}>
+				<button disabled={isLoading} onClick={loginWithGithub} className={'border-2 border-black rounded-md p-2 disabled:border-gray-200 disabled:text-gray-200'}>
 					Login with GitHub
 				</button>
 			</div>
