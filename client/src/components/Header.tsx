@@ -1,23 +1,29 @@
 import {useNavigate} from "react-router-dom";
 import React from "react";
 import {useAuthContext} from "../hooks/useAuthContext";
+import {useNotificationContext} from "../hooks/useNotificationContext";
+import {NotificationMethods} from "../contexts/NotificationContext";
 
 export function Header() {
 
 	const navigate = useNavigate();
 	const { user } = useAuthContext();
-
+	const {setNotification} = useNotificationContext();
 	const login_button = (
 		<button onClick={() => navigate('/login')}>
 			Login
 		</button>
 	)
 
+	const handleLogOut = () => {
+		setNotification({type: NotificationMethods.Success, message: "Logging out"})
+	}
+
 	const user_logo = (
 		<div className={'flex gap-4'}>
 			<img src={user?.image} className={'w-[40px] rounded-full'} alt={'profile'}/>
 
-			<button onClick={() => {}}>Log Out
+			<button onClick={handleLogOut}>Log Out
 			</button>
 		</div>
 	)

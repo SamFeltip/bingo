@@ -9,20 +9,19 @@ import {
 	Route,
 } from "react-router-dom"
 
-import {Header} from "./components/Header";
+import {NotificationContextProvider} from "./contexts/NotificationContext";
 
 
 function App() {
 
 	return (
 		<BrowserRouter>
-			<Header/>
-			<main>
+			<NotificationContextProvider>
 				<Routes>
 					<Route path="/" element={<Home/>}/>
 					<Route path="login" element={<Login/>}/>
 				</Routes>
-			</main>
+			</NotificationContextProvider>
 		</BrowserRouter>
 	);
 }
