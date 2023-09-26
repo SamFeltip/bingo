@@ -9,8 +9,9 @@ export const useSignup = () => {
 
 	const signup = async (email: String) => {
 		setIsLoading(true)
+		console.log('use signup hook is being used')
 
-		const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/`, {
+		fetch(`${process.env.REACT_APP_BACKEND_URL}/users/`, {
 			method: "POST",
 			credentials: 'include',
 			headers: {
@@ -18,22 +19,21 @@ export const useSignup = () => {
 			},
 
 			body: JSON.stringify({ email }),
-		})
-
-		const json_res = await res.json()
-
-		if(!json_res.ok){
-			setIsLoading(false)
-			setError(json_res.error)
-		}else{
-
+		}).then((res) => {
+			return res.json()
+		}).then((json_res) => {
 			localStorage.setItem("current_user", JSON.stringify(json_res.new_user))
 			dispatch({
 				type: 'LOGIN',
 				payload: json_res.new_user
 			})
 			setIsLoading(false)
-		}
+		}).catch(err => {
+			console.log('error')
+			setIsLoading(false)
+			console.log(err)
+			setError(err)
+		})
 	}
 
 	return { signup, isLoading, error}

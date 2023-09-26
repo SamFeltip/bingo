@@ -1,19 +1,16 @@
 const jwt = require('jsonwebtoken');
 const axios = require("axios");
-pool = require("../database");
+const db = require("../db/models");
+// pool = require("../database");
 
 // static
 exports.getUserByEmail = (email) => {
 
-    return new Promise((resolve, reject) => {
-        pool.query('SELECT * FROM users WHERE email = $1', [email], (error, results) => {
-            if (error) {
-                reject(error)
-            }else{
-                resolve(results.rows[0])
-            }
-        })
-    })
+    return db.User.findOne({
+		where: {
+			email: email
+		}
+	})
 }
 
 exports.getUsersPrimaryEmailFromGitHub = async (token) => {

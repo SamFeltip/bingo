@@ -23,8 +23,14 @@ app.use(cors({
 app.use(cookieParser());
 
 
-app.get('/', (req, res) => {
-    res.send('backend!');
+// const {sequelize} = require("./db");
+const db = require("./db/models")
+
+app.get('/', async (req, res) => {
+
+	console.log(db.User.findAll().then(users => {
+		res.json(users)
+	}))
 });
 
 const userRoutes = require('./routes/userRoutes');
@@ -39,5 +45,6 @@ const server = https.createServer({key: key, cert: cert }, app);
 
 server.listen(port, () => {
     console.log(`[server]: Server is running at https://localhost:${port}`);
+
 });
 // redirect the user to the home page, along with the access token

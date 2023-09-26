@@ -38,7 +38,9 @@ function Login() {
 
 					if(!current_user.id){
 						setBannerMessage('creating new account...')
-						await signup(current_user.email)
+						signup(current_user.email).then(() => {
+							window.location.replace('/')
+						})
 
 					}else{
 
@@ -57,7 +59,6 @@ function Login() {
 				console.log('error!?')
 				console.error(err)
 			}
-
 		}
 
 		if(codeParam){

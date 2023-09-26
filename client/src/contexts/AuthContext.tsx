@@ -15,10 +15,12 @@ type AuthAction = {
 const authReducer = ( state: {user: User | null}, action: AuthAction): { user: User | null } => {
 	switch (action.type) {
 		case 'LOGIN':
+			console.log('login happening via dispatch')
 			return {user: action.payload || null};
 		case 'LOGOUT':
 			return {user: null};
 		default:
+			console.log('default state via dispatch')
 			return state;
 	}
 };
