@@ -25,7 +25,7 @@ module.exports = {
 		});
 
 		await queryInterface.createTable('Participants', {
-			userId: {
+			UserId: {
 				type: Sequelize.INTEGER,
 				references: {
 					model: 'Users',
@@ -33,7 +33,7 @@ module.exports = {
 				},
 				allowNull: false
 			},
-			sheetId: {
+			SheetId: {
 				type: Sequelize.INTEGER,
 				references: {
 					model: 'Sheets',
@@ -44,6 +44,14 @@ module.exports = {
 			isOwner: {
 				type: Sequelize.BOOLEAN,
 				defaultValue: false
+			},
+			createdAt: {
+				allowNull: false,
+				type: Sequelize.DATE
+			},
+			updatedAt: {
+				allowNull: false,
+				type: Sequelize.DATE
 			}
 		});
 	},

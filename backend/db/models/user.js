@@ -11,15 +11,18 @@ module.exports = (sequelize, DataTypes) => {
 		 * The `models/index` file will call this method automatically.
 		 */
 		static associate(models) {
-			User.belongsToMany(models.Sheet, { through: 'Participants', as: 'sheets' });
+			User.belongsToMany(models.Sheet, {
+				through: 'Participants',
+				as: 'sheets'
+			});
 
 			// Only owned sheets
 			User.belongsToMany(models.Sheet, {
 				through: {
 					model: 'Participants',
-					scope: { is_owner: true }
-				},
-				as: 'ownedSheets'
+					as: 'ownedSheets',
+					scope: {is_owner: true}
+				}
 			});
 		}
 	}

@@ -34,29 +34,39 @@ module.exports = {
 		// Add demo participants
 		await queryInterface.bulkInsert('Participants', [
 			{
-				userId: users.find(user => user.name === 'JohnDoe').id,
-				sheetId: sheets.find(sheet => sheet.name === 'Friday Night Bingo').id,
-				isOwner: true
+				UserId: users.find(user => user.name === 'JohnDoe').id,
+				SheetId: sheets.find(sheet => sheet.name === 'Friday Night Bingo').id,
+				isOwner: true,
+				createdAt: new Date(),
+				updatedAt: new Date()
 			},
 			{
-				userId: users.find(user => user.name === 'JaneSmith').id,
-				sheetId: sheets.find(sheet => sheet.name === 'Friday Night Bingo').id,
-				isOwner: false
+				UserId: users.find(user => user.name === 'JaneSmith').id,
+				SheetId: sheets.find(sheet => sheet.name === 'Friday Night Bingo').id,
+				isOwner: false,
+				createdAt: new Date(),
+				updatedAt: new Date()
 			},
 			{
-				userId: users.find(user => user.name === 'Samuel Felton').id,
-				sheetId: sheets.find(sheet => sheet.name === 'Friday Night Bingo').id,
-				isOwner: false
+				UserId: users.find(user => user.name === 'Samuel Felton').id,
+				SheetId: sheets.find(sheet => sheet.name === 'Friday Night Bingo').id,
+				isOwner: false,
+				createdAt: new Date(),
+				updatedAt: new Date()
 			},
 			{
-				userId: users.find(user => user.name === 'Samuel Felton').id,
-				sheetId: sheets.find(sheet => sheet.name === 'Sunday Funday Bingo').id,
-				isOwner: true
+				UserId: users.find(user => user.name === 'Samuel Felton').id,
+				SheetId: sheets.find(sheet => sheet.name === 'Sunday Funday Bingo').id,
+				isOwner: true,
+				createdAt: new Date(),
+				updatedAt: new Date()
 			},
 			{
-				userId: users.find(user => user.name === 'JaneSmith').id,
-				sheetId: sheets.find(sheet => sheet.name === 'Sunday Funday Bingo').id,
-				isOwner: false
+				UserId: users.find(user => user.name === 'JaneSmith').id,
+				SheetId: sheets.find(sheet => sheet.name === 'Sunday Funday Bingo').id,
+				isOwner: false,
+				createdAt: new Date(),
+				updatedAt: new Date()
 			},
 			// add more participants as needed
 		], {});
