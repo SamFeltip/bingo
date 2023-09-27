@@ -10,6 +10,7 @@ import {
 } from "react-router-dom"
 
 import {NotificationContextProvider} from "./contexts/NotificationContext";
+import {User} from "./pages/User";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
 			<NotificationContextProvider>
 				<Routes>
 					<Route path="/" element={<Home/>}/>
+					<Route path="user/:id" element={<User/>}/>
 					<Route path="login" element={<Login/>}/>
 				</Routes>
 			</NotificationContextProvider>
