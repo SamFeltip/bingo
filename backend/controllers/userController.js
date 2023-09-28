@@ -1,6 +1,6 @@
 const axios = require("axios");
-const userHelper = require("../helpers/userHelper");
 const db = require("../db/models")
+const jwt = require("jsonwebtoken");
 
 
 exports.getUser = (req, res) => {
@@ -57,7 +57,7 @@ exports.createUser = async (req, res) => {
 			const {id} = user.dataValues
 
 			//     create JWT for authentication between client and server
-			const session_token = userHelper.createToken(id)
+			const session_token = jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: '1d'})
 			res.cookie('session', session_token, { httpOnly: true, secure: true, sameSite: 'none' });
 
 			res.status(200).json({new_user: {id, name, image: avatar_url, email}})

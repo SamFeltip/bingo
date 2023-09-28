@@ -6,15 +6,13 @@ const {
 module.exports = (sequelize, DataTypes) => {
 	class Participant extends Model {
 		static associate(models) {
-			Participant.belongsTo(models.Sheet, {foreignKey: 'sheetId'});
-			Participant.belongsTo(models.User, {foreignKey: 'userId'});
+			Participant.belongsTo(models.User);
+			Participant.belongsTo(models.Sheet);
 		}
 	}
 
 	Participant.init({
-		userId: DataTypes.INTEGER,
-		sheetId: DataTypes.INTEGER,
-		is_owner: DataTypes.BOOLEAN
+		isOwner: DataTypes.BOOLEAN
 	}, {
 		sequelize,
 		modelName: 'Participant',

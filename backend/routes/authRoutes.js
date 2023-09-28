@@ -2,6 +2,7 @@ const axios = require("axios");
 const express = require("express");
 const router = express.Router();
 const userHelper = require("../helpers/userHelper");
+const jwt = require("jsonwebtoken");
 
 router.get('/', (req, res) => {
     res.send('auth root')
@@ -62,7 +63,7 @@ router.get('/getUserData', async (req, res) => {
 
             const USER_ACCOUNT_EXISTS = user?.id
             if (USER_ACCOUNT_EXISTS){
-                const session_token = userHelper.createToken(user.id)
+                const session_token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: '1d'})
                 res.cookie('session', session_token, { httpOnly: true, secure: true, sameSite: 'none' });
             }
 

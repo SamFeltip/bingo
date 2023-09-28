@@ -1,5 +1,3 @@
-const axios = require("axios");
-const userHelper = require("../helpers/userHelper");
 const {Sheet, User, Participant} = require("../db/models")
 
 exports.getSheetById = (req, res) => {
@@ -28,6 +26,41 @@ exports.getSheetById = (req, res) => {
 exports.createSheet = (req, res) => {
 
 };
+
 exports.getSheets = (req, res) => {
+
+	if (!req.current_user) {
+		res.status(401).json({error: 'cannot find authenticated user'})
+	}
+
+	// Sheet.findAll({
+	// 	where: {
+	// 		'$participants.UserId$': req.current_user.id
+	// 	},
+	// 	include: [{
+	// 		model: Participant,
+	// 		where: {
+	// 			UserId: req.current_user.id,
+	// 			SheetId: Sheet.id
+	// 		}
+	// 	}]
+	Sheet.findAll({
+		include: [{
+			model: Participant,
+			where: {
+				UserId: req.current_user.id
+			},
+			attributes: ["isOwner", "UserId"]
+		},
+		{
+			model: User
+		}]
+	}).then(sheets => {
+		res.json(sheets)
+	}).catch(err => {
+		console.log(err)
+		res.status(400).json({error: 'cannot retrieve sheets'})
+	})
+
 
 };

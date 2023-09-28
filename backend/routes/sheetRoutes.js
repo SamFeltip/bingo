@@ -1,7 +1,10 @@
 // userRoutes.js
 const express = require('express');
-const router = express.Router();
 const controllers = require('../controllers/sheetController');
+const requireAuth = require("../middleware/requireAuth");
+const router = express.Router();
+
+router.use(requireAuth)
 
 // Define your routes here
 router.get('/', controllers.getSheets);
