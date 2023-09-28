@@ -23,9 +23,6 @@ exports.getSheetById = (req, res) => {
 		throw err
 	})
 };
-exports.createSheet = (req, res) => {
-
-};
 
 exports.getSheets = (req, res) => {
 
@@ -33,17 +30,6 @@ exports.getSheets = (req, res) => {
 		res.status(401).json({error: 'cannot find authenticated user'})
 	}
 
-	// Sheet.findAll({
-	// 	where: {
-	// 		'$participants.UserId$': req.current_user.id
-	// 	},
-	// 	include: [{
-	// 		model: Participant,
-	// 		where: {
-	// 			UserId: req.current_user.id,
-	// 			SheetId: Sheet.id
-	// 		}
-	// 	}]
 	Sheet.findAll({
 		include: [{
 			model: Participant,

@@ -3,15 +3,15 @@ const {User} = require("../db/models");
 
 const requireAuth = async (req, res, next) => {
 
-	const {session} = req.cookies
-	console.log(session)
+	const {session_token} = req.cookies
+	console.log(session_token)
 
-	if (!session) {
-		return res.status(401).json({error: "no session given"})
+	if (!session_token) {
+		return res.status(401).json({error: "no session_token given"})
 	}
 
 	try {
-		const {id} = jwt.verify(session, process.env.JWT_SECRET)
+		const {id} = jwt.verify(session_token, process.env.JWT_SECRET)
 
 		req.current_user = await User.findByPk(id, null)
 		console.log('completed')

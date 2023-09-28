@@ -58,7 +58,7 @@ exports.createUser = async (req, res) => {
 
 			//     create JWT for authentication between client and server
 			const session_token = jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: '1d'})
-			res.cookie('session', session_token, { httpOnly: true, secure: true, sameSite: 'none' });
+			res.cookie('session_token', session_token, { httpOnly: true, secure: true, sameSite: 'none' });
 
 			res.status(200).json({new_user: {id, name, image: avatar_url, email}})
 		}).catch((err) => {

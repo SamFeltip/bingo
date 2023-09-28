@@ -64,7 +64,7 @@ router.get('/getUserData', async (req, res) => {
             const USER_ACCOUNT_EXISTS = user?.id
             if (USER_ACCOUNT_EXISTS){
                 const session_token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: '1d'})
-                res.cookie('session', session_token, { httpOnly: true, secure: true, sameSite: 'none' });
+                res.cookie('session_token', session_token, { httpOnly: true, secure: true, sameSite: 'none' });
             }
 
             res.status(200).json({success: true, data: {current_user}})
