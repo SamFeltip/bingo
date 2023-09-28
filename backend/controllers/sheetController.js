@@ -6,21 +6,17 @@ exports.getSheetById = (req, res) => {
 	Sheet.findByPk(id, {
 		include: [
 			{
-				model: User,
-				as: 'participants',
-				required: true,
-				attributes: ['name'],
-			},
-			{
-				model: User,
-				as: 'owner',
-				attributes: ['name']
+				model: Participant,
+				attributes: ['id', 'isOwner'],
+				include: {
+					model: User
+				}
 			}
 		]
 	}).then(sheet => {
 		res.status(200).json(sheet)
-	}).catch(err => {
-		throw err
+	}).catch(error => {
+		res.status(401).json({error})
 	})
 };
 
@@ -31,16 +27,13 @@ exports.getSheets = (req, res) => {
 	}
 
 	Sheet.findAll({
-		include: [{
+		include: {
 			model: Participant,
-			where: {
-				UserId: req.current_user.id
-			},
-			attributes: ["isOwner", "UserId"]
-		},
-		{
-			model: User
-		}]
+			attributes: ["isOwner", "id"],
+			include: {
+				model: User
+			}
+		}
 	}).then(sheets => {
 		res.json(sheets)
 	}).catch(err => {

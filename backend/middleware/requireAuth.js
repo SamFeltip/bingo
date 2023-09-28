@@ -7,6 +7,7 @@ const requireAuth = async (req, res, next) => {
 	console.log(session_token)
 
 	if (!session_token) {
+		console.log('no session token')
 		return res.status(401).json({error: "no session_token given"})
 	}
 

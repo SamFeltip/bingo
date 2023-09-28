@@ -12,6 +12,8 @@ import {
 import {NotificationContextProvider} from "./contexts/NotificationContext";
 import {User} from "./pages/users/User";
 import {Users} from "./pages/users/Users";
+import {Sheet} from "./pages/sheets/Sheet";
+import {Sheets} from "./pages/sheets/Sheets";
 
 
 function App() {
@@ -23,6 +25,10 @@ function App() {
 					<Route path="/" element={<Home/>}/>
 					<Route path="users/:id" element={<User/>}/>
 					<Route path="users" element={<Users/>}/>
+
+					<Route path="sheets/:id" element={<Sheet/>}/>
+					<Route path="sheets" element={<Sheets/>}/>
+
 					<Route path="login" element={<Login/>}/>
 				</Routes>
 			</NotificationContextProvider>
