@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
 
 router.post('/getAccessToken', controllers.getAccessToken);
 
-
+router.post("/deleteSessionCookie", controllers.deleteSessionCookie)
 
 router.get('/getUserData', controllers.getUserData)
 

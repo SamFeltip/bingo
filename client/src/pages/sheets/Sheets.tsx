@@ -19,7 +19,13 @@ export function Sheets() {
 		}
 
 		getSheets().then((res) => {
-			return res.json()
+
+			if(res.status === 401){
+				console.log(sheets)
+				window.location.replace("/login?authenticatedUrl=" + "sheets")
+			}else{
+				return res.json()
+			}
 		}).then((fetched_sheets) => {
 			setSheets(fetched_sheets)
 			setLoading(false)
@@ -31,7 +37,7 @@ export function Sheets() {
 		<div className={"py-3 px-7"}>
 			{loading
 				? "loading..."
-				: sheets.map(sheet => <Sheet key={"sheet" + sheet.id} {...sheet}/>)
+				: sheets && sheets.map(sheet => <Sheet key={"sheet" + sheet.id} {...sheet}/>)
 			}
 		</div>
 	);

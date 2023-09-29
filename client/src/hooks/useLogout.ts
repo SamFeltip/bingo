@@ -9,13 +9,30 @@ export const useLogout = () => {
 	const logout = async () => {
 
 		setIsLoading(true)
-		localStorage.removeItem("current_user")
+
 		dispatch({
 			type: 'LOGOUT'
 		})
+
+		await localStorage.removeItem("current_user")
+
+		// send request to the server to delete the "session_token" and "oauth_access_token" http only cookies
+
+		try {
+
+
+			await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/deleteSessionCookie`, {
+				method: "POST",
+				credentials: 'include'
+			})
+
+		}catch (err){
+			console.error(err)
+		}
+
 		setIsLoading(false)
 	}
 
-	return { logout, isLoading}
+	return { logout, isLoading }
 
 }

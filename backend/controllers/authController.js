@@ -1,7 +1,14 @@
+
 const userHelper = require("../helpers/userHelper");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
 
+exports.deleteSessionCookie = async (req, res) => {
+	res.status(200)
+		.cookie('oauth_access_token', "", { httpOnly: true, secure: true, sameSite: 'none' })
+		.cookie('session_token', "", { httpOnly: true, secure: true, sameSite: 'none' })
+		.json({ message: 'Access token cookie removed' })
+};
 
 exports.getAccessToken = async (req, res) => {
 
@@ -26,10 +33,9 @@ exports.getAccessToken = async (req, res) => {
 		if(!access_token){
 			res.status(200).send({ success: false, data: 'no access token given. code may have been invalid' });
 		}else{
-			res
-				.status(200)
-				.cookie('oauth_access_token', access_token, { httpOnly: true, secure: true, sameSite: 'none' })
-				.json({ message: 'Access token cookie created' });
+			res.status(200)
+			.cookie('oauth_access_token', access_token, { httpOnly: true, secure: true, sameSite: 'none' })
+			.json({ message: 'Access token cookie created' });
 		}
 
 

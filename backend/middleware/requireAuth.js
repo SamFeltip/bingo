@@ -4,7 +4,6 @@ const {User} = require("../db/models");
 const requireAuth = async (req, res, next) => {
 
 	const {session_token} = req.cookies
-	console.log(session_token)
 
 	if (!session_token) {
 		console.log('no session token')

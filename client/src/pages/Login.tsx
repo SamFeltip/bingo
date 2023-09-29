@@ -15,6 +15,7 @@ function Login() {
 		const queryString = window.location.search;
 		const urlParams = new URLSearchParams(queryString);
 		const codeParam = urlParams.get('code');
+		const redirectParam = urlParams.get('authenticatedUrl')
 
 		const getAccessToken = async (codeParam: String) => {
 			try {
@@ -39,7 +40,10 @@ function Login() {
 					if(!current_user.id){
 						setBannerMessage('creating new account...')
 						signup(current_user.email).then(() => {
-							window.location.replace('/')
+
+							const redirect = localStorage.getItem("redirectWhenAuthenticated") || ""
+							localStorage.removeItem("redirectWhenAuthenticated")
+							window.location.replace('/' + redirect)
 						})
 
 					}else{
@@ -50,7 +54,10 @@ function Login() {
 						})
 
 						localStorage.setItem("current_user", JSON.stringify(current_user))
-						window.location.replace('/')
+
+						const redirect = localStorage.getItem("redirectWhenAuthenticated") || ""
+						localStorage.removeItem("redirectWhenAuthenticated")
+						window.location.replace('/' + redirect)
 					}
 
 				}
@@ -59,6 +66,10 @@ function Login() {
 				console.log('error!?')
 				console.error(err)
 			}
+		}
+
+		if(redirectParam){
+			localStorage.setItem("redirectWhenAuthenticated", redirectParam)
 		}
 
 		if(codeParam){

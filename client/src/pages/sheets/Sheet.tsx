@@ -19,7 +19,12 @@ export function Sheet() {
 		}
 
 		getSheet().then((res) => {
-			return res.json()
+			if(res.status === 401){
+				// TODO this can be requested by the server
+				window.location.replace("/login?authenticatedUrl=" + "sheets/" + id)
+			}else{
+				return res.json()
+			}
 		}).then((fetched_sheet) => {
 			setSheet(fetched_sheet)
 			setLoading(false)
