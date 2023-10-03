@@ -18,19 +18,15 @@ export const useLogout = () => {
 
 		// send request to the server to delete the "session_token" and "oauth_access_token" http only cookies
 
-		try {
-
-
-			await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/deleteSessionCookie`, {
-				method: "POST",
-				credentials: 'include'
-			})
-
-		}catch (err){
+		fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/deleteSessionCookie`, {
+			method: "POST",
+			credentials: 'include'
+		}).then(() => {
+			setIsLoading(false)
+		}).catch(err => {
 			console.error(err)
-		}
+		})
 
-		setIsLoading(false)
 	}
 
 	return { logout, isLoading }

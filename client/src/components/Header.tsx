@@ -1,9 +1,11 @@
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import React from "react";
 import {useAuthContext} from "../hooks/useAuthContext";
 import {useNotificationContext} from "../hooks/useNotificationContext";
 import {NotificationMethods} from "../contexts/NotificationContext";
 import {useLogout} from "../hooks/useLogout";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faArrowRightFromBracket} from '@fortawesome/free-solid-svg-icons'
 
 export function Header() {
 
@@ -14,7 +16,7 @@ export function Header() {
 	const { logout } = useLogout()
 
 	const login_button = (
-		<button onClick={() => navigate('/login')}>
+		<button className={'hover:text-primary-hover'} onClick={() => navigate('/login')}>
 			Login
 		</button>
 	)
@@ -28,20 +30,32 @@ export function Header() {
 
 	const user_logo = (
 		<div className={'flex gap-4'}>
-			<img src={user?.image} className={'w-[40px] rounded-full'} alt={'profile'}/>
-
-			<button onClick={handleLogOut}>Log Out
+			<button onClick={handleLogOut} className={'hover:text-primary-hover gap-2 flex items-center'}>
+				<div className={'italic'}>
+					Log out
+				</div>
+				<FontAwesomeIcon icon={faArrowRightFromBracket} className={''}/>
 			</button>
+			<img src={user?.image} className={'w-[40px] rounded-full'} alt={'profile'}/>
 		</div>
 	)
 
+	const login_links = (
+		<>
+			<Link to={'/sheets'} className={'hover:text-primary-hover'}>Sheets</Link>
+		</>
+	)
+
 	return <div>
-		<div className={"flex justify-between items-center p-2 bg-gray-100"}>
+		<div className={"flex justify-between items-center p-2"}>
+			<div className={'flex gap-3 items-center'}>
 
-			<button className={"font-bold text-lg"} onClick={() => navigate('/')}>
-				Bingo!
-			</button>
+				<button className={"font-bold text-lg me-2 hover:text-primary-hover"} onClick={() => navigate('/')}>
+					Bingo!
+				</button>
 
+				{user && login_links}
+			</div>
 			<div>
 				{user
 					? user_logo

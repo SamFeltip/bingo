@@ -2,8 +2,8 @@ import React, {ReactNode, useEffect, useState} from "react";
 import {Header} from "../components/Header";
 
 export enum NotificationMethods {
-	Warning = 'red',
-	Error = 'orange',
+	Error = 'red',
+	Warning = 'orange',
 	Success = 'green',
 	None = 'gray',
 }
@@ -35,6 +35,7 @@ const NotificationContextProvider: React.FC<{children: ReactNode}> = ({ children
 
 	const error_banner = (
 		<div className={`relative top-0 border-t-2 border-b-2 p-3 border-red-700 text-red-700 bg-red-50`}>
+
 			{notification?.message}
 		</div>
 	)
