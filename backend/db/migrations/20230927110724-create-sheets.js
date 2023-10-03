@@ -26,10 +26,10 @@ module.exports = {
 
 		await queryInterface.createTable('Participants', {
 			id: {
-				type: Sequelize.INTEGER,
-				primaryKey: true,
+				allowNull: false,
 				autoIncrement: true,
-				allowNull: false
+				primaryKey: true,
+				type: Sequelize.INTEGER
 			},
 			UserId: {
 				type: Sequelize.INTEGER,

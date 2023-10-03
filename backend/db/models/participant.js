@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 			Participant.belongsTo(models.Sheet);
 
 			Participant.hasMany(models.ParticipantSheetItem);
+
 		}
 	}
 

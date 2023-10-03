@@ -9,6 +9,6 @@ router.use(requireAuth)
 // Define your routes here
 router.get('/', controllers.getSheets);
 router.post("/", controllers.createSheet);
-router.get("/:id", controllers.getSheetById);
+router.get("/:sheet_id", controllers.getSheetById);
 // Export the router
 module.exports = router;

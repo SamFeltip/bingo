@@ -11,10 +11,10 @@ const requireAuth = async (req, res, next) => {
 	}
 
 	try {
-		const {id} = jwt.verify(session_token, process.env.JWT_SECRET)
+		const {user_id} = jwt.verify(session_token, process.env.JWT_SECRET)
 
-		req.current_user = await User.findByPk(id, null)
-		console.log('completed')
+		req.current_user = await User.findByPk(user_id, null)
+		console.log('authenticated successfully')
 		next()
 
 	} catch (err) {

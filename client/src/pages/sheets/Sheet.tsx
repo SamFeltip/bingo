@@ -4,330 +4,95 @@ import {useNotificationContext} from "../../hooks/useNotificationContext";
 import {NotificationMethods} from "../../contexts/NotificationContext";
 
 
-type ParticipantBlockProps = {
+type ParticipantSheetItemProps = {
+	isOwner: boolean;
 	id: number;
+	position: number;
 	text: String;
 	checked: boolean;
 }
 
-
-// [
-// 		{
-// 			id: 0,
-// 			text: "John spills their drink",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 1,
-// 			text: "unexpected karaoke performance",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 2,
-// 			text: "conga line",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 3,
-// 			text: "Emma takes a selfie",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 4,
-// 			text: "someone tells a bad joke",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 5,
-// 			text: "Mike loses their phone",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 6,
-// 			text: "someone requests a song from the DJ",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 7,
-// 			text: "Sarah starts a dance-off",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 8,
-// 			text: "someone sings along loudly to a song",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 9,
-// 			text: "David looses his drink",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 10,
-// 			text: "someone talks about work at a party",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 11,
-// 			text: "Lisa shows off a party trick",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 12,
-// 			text: "'I love the food'",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 13,
-// 			text: "Tom proposes a toast",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 14,
-// 			text: "someone starts talking about their pet",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 15,
-// 			text: "Sophie finds confetti in their drink",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 16,
-// 			text: "someone tries to DJ",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 17, text: "James starts a hashtag",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 18, text: "crazy dancing",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 19,
-// 			text: "Anna takes a group photo",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 20,
-// 			text: "'cant wait for next year!'",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 21,
-// 			text: "Chris finds an unexpected plus one",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 22,
-// 			text: "dan finds his new BFF",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 23,
-// 			text: "Emily talks about their favorite movie",
-// 			checked: false
-// 		},
-// 		{
-// 			id: 24,
-// 			text: "someone can't stop laughing at a joke",
-// 			checked: false
-// 		}
-// 	]
-
 export function Sheet() {
 
-	const [sheet, setSheet] = useState({name: ""})
 	const [loading, setLoading] = useState(false)
 	const {setNotification} = useNotificationContext();
 
-	const [participantBlocks, setParticipantBlocks] = useState<ParticipantBlockProps[]>([
-		{
-			id: 0,
-			text: "",
-			checked: false
-		},
-		{
-			id: 1,
-			text: "",
-			checked: false
-		},
-		{
-			id: 2,
-			text: "",
-			checked: false
-		},
-		{
-			id: 3,
-			text: "",
-			checked: false
-		},
-		{
-			id: 4,
-			text: "",
-			checked: false
-		},
-		{
-			id: 5,
-			text: "",
-			checked: false
-		},
-		{
-			id: 6,
-			text: "",
-			checked: false
-		},
-		{
-			id: 7,
-			text: "",
-			checked: false
-		},
-		{
-			id: 8,
-			text: "",
-			checked: false
-		},
-		{
-			id: 9,
-			text: "",
-			checked: false
-		},
-		{
-			id: 10,
-			text: "",
-			checked: false
-		},
-		{
-			id: 11,
-			text: "",
-			checked: false
-		},
-		{
-			id: 12,
-			text: "",
-			checked: false
-		},
-		{
-			id: 13,
-			text: "",
-			checked: false
-		},
-		{
-			id: 14,
-			text: "",
-			checked: false
-		},
-		{
-			id: 15,
-			text: "",
-			checked: false
-		},
-		{
-			id: 16,
-			text: "",
-			checked: false
-		},
-		{
-			id: 17,
-			text: "",
-			checked: false
-		},
-		{
-			id: 18,
-			text: "",
-			checked: false
-		},
-		{
-			id: 19,
-			text: "",
-			checked: false
-		},
-		{
-			id: 20,
-			text: "",
-			checked: false
-		},
-		{
-			id: 21,
-			text: "",
-			checked: false
-		},
-		{
-			id: 22,
-			text: "",
-			checked: false
-		},
-		{
-			id: 23,
-			text: "",
-			checked: false
-		},
-		{
-			id: 24,
-			text: "",
-			checked: false
-		}
+	const [participantSheetItems, setParticipantSheetItems] = useState<ParticipantSheetItemProps[]>([
+		{isOwner: false, id: 0, position: 0, text: "", checked: false},
+		{isOwner: false, id: 1, position: 1, text: "", checked: false},
+		{isOwner: false, id: 2, position: 2, text: "", checked: false},
+		{isOwner: false, id: 3, position: 3, text: "", checked: false},
+		{isOwner: false, id: 4, position: 4, text: "", checked: false},
+		{isOwner: false, id: 5, position: 5, text: "", checked: false},
+		{isOwner: false, id: 6, position: 6, text: "", checked: false},
+		{isOwner: false, id: 7, position: 7, text: "", checked: false},
+		{isOwner: false, id: 8, position: 8, text: "", checked: false},
+		{isOwner: false, id: 9, position: 9, text: "", checked: false},
+		{isOwner: false, id: 10, position: 10, text: "", checked: false},
+		{isOwner: false, id: 11, position: 11, text: "", checked: false},
+		{isOwner: false, id: 12, position: 12, text: "", checked: false},
+		{isOwner: false, id: 13, position: 13, text: "", checked: false},
+		{isOwner: false, id: 14, position: 14, text: "", checked: false},
+		{isOwner: false, id: 15, position: 15, text: "", checked: false},
+		{isOwner: false, id: 16, position: 16, text: "", checked: false},
+		{isOwner: false, id: 17, position: 17, text: "", checked: false},
+		{isOwner: false, id: 18, position: 18, text: "", checked: false},
+		{isOwner: false, id: 19, position: 19, text: "", checked: false},
+		{isOwner: false, id: 20, position: 20, text: "", checked: false},
+		{isOwner: false, id: 21, position: 21, text: "", checked: false},
+		{isOwner: false, id: 22, position: 22, text: "", checked: false},
+		{isOwner: false, id: 23, position: 23, text: "", checked: false},
+		{isOwner: false, id: 24, position: 24, text: "", checked: false}
 	])
+
 
 	const {id: sheet_id} = useParams()
 
 	useEffect(() => {
 		setLoading(true)
 
-		const getSheet = async () => {
-			return fetch(`${process.env.REACT_APP_BACKEND_URL}/sheets/` + sheet_id, {
-				method: "GET",
-				credentials: 'include'
-			})
-		}
-
-		getSheet().then((res) => {
-			if(!res.ok){
+		fetch(`${process.env.REACT_APP_BACKEND_URL}/sheets/` + sheet_id, {
+			method: "GET",
+			credentials: 'include'
+		}).then((res) => {
+			if (!res.ok) {
+				console.error(res)
 				throw Error(`${res.status}: ${res.statusText}`)
 			}
 
-			if (res.status === 401) {
+			if (res.status !== 200) {
 				window.location.replace("/login?authenticatedUrl=" + "sheets/" + sheet_id)
 			} else {
 				return res.json()
 			}
-		}).then((fetched_sheet) => {
-			setSheet(fetched_sheet)
-
-			if(!fetched_sheet?.participant?.blocks){
-				setLoading(false)
-				throw Error('blocks could not be retrieved')
-			}else{
-				setParticipantBlocks(fetched_sheet?.participant?.blocks)
-			}
-
+		}).then((fetched_participant_sheet_items) => {
+			setParticipantSheetItems(fetched_participant_sheet_items)
 			setLoading(false)
+
 		}).catch(err => {
-			console.error(err)
 			setNotification({type: NotificationMethods.Error, message: err.message})
 		})
 
 	}, [])
 
 
-	const toggleParticipantBlock = (participantBlock: ParticipantBlockProps) => {
+	const toggleParticipantBlock = (participantSheetItem: ParticipantSheetItemProps) => {
 
-		fetch(process.env.REACT_APP_BACKEND_URL + "/updateParticipantBlocks/" + participantBlock.id)
-		.then(res => {
+		fetch(process.env.REACT_APP_BACKEND_URL + "/participantSheetItem/" + participantSheetItem.id, {
+			method: "PATCH",
+			credentials: 'include'
+		}).then(res => {
 			if (!res.ok) {
 				throw Error(`error ${res.status} with error: ${res.statusText}`)
 			}
-			setParticipantBlocks(prevParticipantBlocks => {
-				const newParticipantBlocks = [...prevParticipantBlocks]
-				newParticipantBlocks[participantBlock.id].checked = !participantBlock.checked
-				return newParticipantBlocks
+			setParticipantSheetItems(prevParticipantSheetItems => {
+				const newParticipantSheetItems = [...prevParticipantSheetItems]
+				newParticipantSheetItems[participantSheetItem.id].checked = !participantSheetItem.checked
+				return newParticipantSheetItems
 			})
 		}).catch(err => {
-			console.log("whoops!")
 			console.log(err.message)
-			setNotification({type: NotificationMethods.Error, message: 'could not send checkoff to server'})
+			setNotification({type: NotificationMethods.Error, message: 'could not send check to server'})
 
 		})
 
@@ -347,7 +112,7 @@ export function Sheet() {
 						</div>
 
 						<div className={'grid grid-cols-5 gap-[5px] min-w-[300px] max-w-[700px]'}>
-							{participantBlocks.map(pb =>
+							{participantSheetItems.map(pb =>
 								<div
 									key={'participantBlock' + pb.id}
 									onClick={() => {
