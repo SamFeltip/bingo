@@ -78,16 +78,17 @@ export function Sheet() {
 
 	const toggleParticipantBlock = (participantSheetItem: ParticipantSheetItemProps) => {
 
-		fetch(process.env.REACT_APP_BACKEND_URL + "/participantSheetItem/" + participantSheetItem.id, {
+		fetch(process.env.REACT_APP_BACKEND_URL + "/participantSheetItems/" + participantSheetItem.id, {
 			method: "PATCH",
 			credentials: 'include'
 		}).then(res => {
 			if (!res.ok) {
 				throw Error(`error ${res.status} with error: ${res.statusText}`)
 			}
+
 			setParticipantSheetItems(prevParticipantSheetItems => {
 				const newParticipantSheetItems = [...prevParticipantSheetItems]
-				newParticipantSheetItems[participantSheetItem.id].checked = !participantSheetItem.checked
+				newParticipantSheetItems[participantSheetItem.position].checked = !participantSheetItem.checked
 				return newParticipantSheetItems
 			})
 		}).catch(err => {
@@ -119,8 +120,13 @@ export function Sheet() {
 										toggleParticipantBlock(pb)
 									}}
 									className={
-										'overflow-hidden cursor-pointer rounded-md border-[1px] aspect-square text-[2vw] sm:text-[1rem] p-2 break-words' +
-										' flex justify-center items-center text-center' + ((pb.checked) ? ' text-background-default bg-primary-default' : ' text-primary-default bg-background-default')
+										'overflow-hidden cursor-pointer break-words ' +
+										'rounded-md border-[1px] aspect-square text-[2vw] sm:text-[1rem]' +
+										' flex justify-center items-center text-center' + (
+											(pb.checked)
+												? ' text-background-default bg-primary-default'
+												: ' text-primary-default bg-background-default'
+										)
 									}>
 									{pb?.text}
 								</div>

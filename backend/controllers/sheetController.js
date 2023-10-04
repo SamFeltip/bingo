@@ -41,11 +41,8 @@ exports.getSheetById = (req, res) => {
 			type: QueryTypes.SELECT
 		}
 	).then(sheet => {
-		console.log("queried")
-		console.log(sheet)
 		res.status(200).json(sheet)
 	}).catch(error => {
-		console.log("issue")
 		console.error(error)
 		res.json({error})
 	})

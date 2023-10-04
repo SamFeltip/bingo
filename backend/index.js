@@ -42,6 +42,10 @@ app.use('/auth', authRoutes)
 const sheetRoutes = require('./routes/sheetRoutes');
 app.use('/sheets', sheetRoutes);
 
+const participantSheetItemRoutes = require('./routes/participantSheetItemRoutes');
+app.use('/participantSheetItems', participantSheetItemRoutes);
+
+
 const port = process.env.PORT || '4000';
 
 const server = https.createServer({key: key, cert: cert }, app);
