@@ -3,16 +3,32 @@
 
 module.exports = {
 	up: async (queryInterface, Sequelize) => {
-		await queryInterface.createTable('Sheets', {
+		await queryInterface.createTable('Participants', {
 			id: {
 				allowNull: false,
 				autoIncrement: true,
 				primaryKey: true,
 				type: Sequelize.INTEGER
 			},
-			name: {
-				type: Sequelize.STRING,
+			UserId: {
+				type: Sequelize.INTEGER,
+				references: {
+					model: 'Users',
+					key: 'id'
+				},
 				allowNull: false
+			},
+			SheetId: {
+				type: Sequelize.INTEGER,
+				references: {
+					model: 'Sheets',
+					key: 'id'
+				},
+				allowNull: false
+			},
+			isOwner: {
+				type: Sequelize.BOOLEAN,
+				defaultValue: false
 			},
 			createdAt: {
 				allowNull: false,
@@ -26,6 +42,6 @@ module.exports = {
 	},
 
 	down: async (queryInterface, Sequelize) => {
-		await queryInterface.dropTable('Sheets');
+		await queryInterface.dropTable('Participants');
 	}
 };

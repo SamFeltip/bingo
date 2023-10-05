@@ -5,10 +5,11 @@ import {NotificationMethods} from "../../contexts/NotificationContext";
 
 
 type ParticipantSheetItemProps = {
-	isOwner: boolean;
 	id: number;
 	position: number;
-	text: String;
+	SheetItem: {
+		text: string;
+	};
 	checked: boolean;
 }
 
@@ -18,31 +19,31 @@ export function Sheet() {
 	const {setNotification} = useNotificationContext();
 	const navigate = useNavigate();
 	const [participantSheetItems, setParticipantSheetItems] = useState<ParticipantSheetItemProps[]>([
-		{isOwner: false, id: 0, position: 0, text: "", checked: false},
-		{isOwner: false, id: 1, position: 1, text: "", checked: false},
-		{isOwner: false, id: 2, position: 2, text: "", checked: false},
-		{isOwner: false, id: 3, position: 3, text: "", checked: false},
-		{isOwner: false, id: 4, position: 4, text: "", checked: false},
-		{isOwner: false, id: 5, position: 5, text: "", checked: false},
-		{isOwner: false, id: 6, position: 6, text: "", checked: false},
-		{isOwner: false, id: 7, position: 7, text: "", checked: false},
-		{isOwner: false, id: 8, position: 8, text: "", checked: false},
-		{isOwner: false, id: 9, position: 9, text: "", checked: false},
-		{isOwner: false, id: 10, position: 10, text: "", checked: false},
-		{isOwner: false, id: 11, position: 11, text: "", checked: false},
-		{isOwner: false, id: 12, position: 12, text: "", checked: false},
-		{isOwner: false, id: 13, position: 13, text: "", checked: false},
-		{isOwner: false, id: 14, position: 14, text: "", checked: false},
-		{isOwner: false, id: 15, position: 15, text: "", checked: false},
-		{isOwner: false, id: 16, position: 16, text: "", checked: false},
-		{isOwner: false, id: 17, position: 17, text: "", checked: false},
-		{isOwner: false, id: 18, position: 18, text: "", checked: false},
-		{isOwner: false, id: 19, position: 19, text: "", checked: false},
-		{isOwner: false, id: 20, position: 20, text: "", checked: false},
-		{isOwner: false, id: 21, position: 21, text: "", checked: false},
-		{isOwner: false, id: 22, position: 22, text: "", checked: false},
-		{isOwner: false, id: 23, position: 23, text: "", checked: false},
-		{isOwner: false, id: 24, position: 24, text: "", checked: false}
+		{id: 0, position: 0, SheetItem: {text: ""}, checked: false},
+		{id: 1, position: 1, SheetItem: {text: ""}, checked: false},
+		{id: 2, position: 2, SheetItem: {text: ""}, checked: false},
+		{id: 3, position: 3, SheetItem: {text: ""}, checked: false},
+		{id: 4, position: 4, SheetItem: {text: ""}, checked: false},
+		{id: 5, position: 5, SheetItem: {text: ""}, checked: false},
+		{id: 6, position: 6, SheetItem: {text: ""}, checked: false},
+		{id: 7, position: 7, SheetItem: {text: ""}, checked: false},
+		{id: 8, position: 8, SheetItem: {text: ""}, checked: false},
+		{id: 9, position: 9, SheetItem: {text: ""}, checked: false},
+		{id: 10, position: 10, SheetItem: {text: ""}, checked: false},
+		{id: 11, position: 11, SheetItem: {text: ""}, checked: false},
+		{id: 12, position: 12, SheetItem: {text: ""}, checked: false},
+		{id: 13, position: 13, SheetItem: {text: ""}, checked: false},
+		{id: 14, position: 14, SheetItem: {text: ""}, checked: false},
+		{id: 15, position: 15, SheetItem: {text: ""}, checked: false},
+		{id: 16, position: 16, SheetItem: {text: ""}, checked: false},
+		{id: 17, position: 17, SheetItem: {text: ""}, checked: false},
+		{id: 18, position: 18, SheetItem: {text: ""}, checked: false},
+		{id: 19, position: 19, SheetItem: {text: ""}, checked: false},
+		{id: 20, position: 20, SheetItem: {text: ""}, checked: false},
+		{id: 21, position: 21, SheetItem: {text: ""}, checked: false},
+		{id: 22, position: 22, SheetItem: {text: ""}, checked: false},
+		{id: 23, position: 23, SheetItem: {text: ""}, checked: false},
+		{id: 24, position: 24, SheetItem: {text: ""}, checked: false}
 	])
 
 
@@ -65,8 +66,8 @@ export function Sheet() {
 			} else {
 				return res.json()
 			}
-		}).then((fetched_participant_sheet_items) => {
-			setParticipantSheetItems(fetched_participant_sheet_items)
+		}).then((sheet) => {
+			setParticipantSheetItems(sheet.Participants[0].ParticipantSheetItems)
 			setLoading(false)
 
 		}).catch(err => {
@@ -128,7 +129,7 @@ export function Sheet() {
 												: ' text-primary-default bg-background-default'
 										)
 									}>
-									{pb?.text}
+									{pb?.SheetItem.text}
 								</div>
 							)}
 						</div>

@@ -8,12 +8,15 @@ module.exports = (sequelize, DataTypes) => {
 		static associate(models) {
 			Sheet.belongsToMany(models.User, { through: models.Participant });
 			Sheet.hasMany(models.Participant);
-
 			Sheet.hasMany(models.SheetItem);
 		}
 	}
-
 	Sheet.init({
+		id: {
+			type: DataTypes.INTEGER,
+			autoIncrement: true,
+			primaryKey: true
+		},
 		name: DataTypes.STRING,
 	}, {
 		sequelize,

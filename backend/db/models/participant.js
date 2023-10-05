@@ -8,13 +8,16 @@ module.exports = (sequelize, DataTypes) => {
 		static associate(models) {
 			Participant.belongsTo(models.User);
 			Participant.belongsTo(models.Sheet);
-
 			Participant.hasMany(models.ParticipantSheetItem);
-
 		}
 	}
 
 	Participant.init({
+		id: {
+			type: DataTypes.INTEGER,
+			autoIncrement: true,
+			primaryKey: true
+		},
 		isOwner: DataTypes.BOOLEAN
 	}, {
 		sequelize,

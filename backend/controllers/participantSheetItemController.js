@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const {sequelize, ParticipantSheetItem} = require("../db/models")
+const {sequelize, ParticipantSheetItem, Participant} = require("../db/models")
 const {QueryTypes} = require("sequelize");
 
 
@@ -11,20 +11,22 @@ exports.toggleCheckedPSI = async (req, res) => {
 	const {user_id} = jwt.verify(session_token, process.env.JWT_SECRET)
 
 	try {
-		const psis = await sequelize.query(
-			'SELECT "ParticipantSheetItems".id, "ParticipantSheetItems".checked FROM "ParticipantSheetItems" INNER JOIN "Participants" P on P.id = "ParticipantSheetItems"."ParticipantId" WHERE P."UserId" = :user_id AND "ParticipantSheetItems".id = :psi_id;',
-			{
-				replacements: {
-					psi_id: psi_id,
-					user_id: user_id
-				},
-				type: QueryTypes.SELECT
+
+		const psi = await ParticipantSheetItem.findOne({
+			where: {id: psi_id},
+			attributes: ["id", "checked"],
+			include: {
+				model: Participant,
+				attributes: ["UserId"],
+				where: {
+					UserId: user_id
+				}
 			}
-		)
+		})
 
 		await ParticipantSheetItem.update(
-			{checked: !psis[0].checked},
-			{where: {id: psis[0].id}}
+			{checked: !psi.checked},
+			{where: {id: psi.id}}
 		)
 
 		res.json({ok: true})
