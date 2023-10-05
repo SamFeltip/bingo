@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useNotificationContext} from "../../hooks/useNotificationContext";
 import {NotificationMethods} from "../../contexts/NotificationContext";
 
@@ -16,7 +16,7 @@ export function Sheet() {
 
 	const [loading, setLoading] = useState(false)
 	const {setNotification} = useNotificationContext();
-
+	const navigate = useNavigate();
 	const [participantSheetItems, setParticipantSheetItems] = useState<ParticipantSheetItemProps[]>([
 		{isOwner: false, id: 0, position: 0, text: "", checked: false},
 		{isOwner: false, id: 1, position: 1, text: "", checked: false},
@@ -61,7 +61,7 @@ export function Sheet() {
 			}
 
 			if (res.status !== 200) {
-				window.location.replace("/login?authenticatedUrl=" + "sheets/" + sheet_id)
+				navigate("/login?authenticatedUrl=" + "sheets/" + sheet_id)
 			} else {
 				return res.json()
 			}

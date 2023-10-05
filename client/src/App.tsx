@@ -10,10 +10,12 @@ import {
 } from "react-router-dom"
 
 import {NotificationContextProvider} from "./contexts/NotificationContext";
-import {User} from "./pages/users/User";
-import {Users} from "./pages/users/Users";
-import {Sheet} from "./pages/sheets/Sheet";
-import {Sheets} from "./pages/sheets/Sheets";
+import {User} from "./pages/users/[id]";
+import {Users} from "./pages/users";
+
+import {Sheet} from "./pages/sheets/[id]";
+import {Sheets} from "./pages/sheets";
+import {CreateSheet} from "./pages/sheets/new";
 
 
 function App() {
@@ -29,6 +31,7 @@ function App() {
 
 						<Route path="sheets/:id" element={<Sheet/>}/>
 						<Route path="sheets" element={<Sheets/>}/>
+						<Route path="sheets/new" element={<CreateSheet/>}/>
 
 						<Route path="login" element={<Login/>}/>
 					</Routes>
