@@ -17,6 +17,7 @@ import {Sheet} from "./pages/sheets/[id]";
 import {Sheets} from "./pages/sheets";
 import {CreateSheet} from "./pages/sheets/new";
 
+import {Participants} from "./pages/participants/[sheet_id]";
 
 function App() {
 
@@ -32,6 +33,9 @@ function App() {
 						<Route path="sheets/:id" element={<Sheet/>}/>
 						<Route path="sheets" element={<Sheets/>}/>
 						<Route path="sheets/new" element={<CreateSheet/>}/>
+
+						<Route path="participants/:sheet_id" element={<Participants/>}/>
+
 
 						<Route path="login" element={<Login/>}/>
 					</Routes>

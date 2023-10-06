@@ -71,9 +71,49 @@ exports.getSheets = (req, res) => {
 		res.status(400).json({error: 'cannot retrieve sheets'})
 	})
 
-
 };
 
-exports.createSheet = (req, res) => {
+exports.createSheet = async (req, res) => {
+
+	const {session_token} = req.cookies
+	const {user_id} = jwt.verify(session_token, process.env.JWT_SECRET)
+	const {name, items} = req.body
+	console.log({name, items})
+	try {
+		const new_sheet = await Sheet.create(
+			{
+				name
+			}
+		)
+
+		await Participant.create({
+			UserId: user_id,
+			SheetId: new_sheet.id,
+			isOwner: true
+		})
+
+		await SheetItem.bulkCreate(items.map(item => {
+			return {
+				SheetId: new_sheet.id,
+				text: item.text
+			}
+		}))
+
+		// will need to be done elsewhere
+		// const participant_sheet_datas = sheet_items.map(sheet_item => {
+		// 	return {
+		// 		ParticipantId: owner_participant.id,
+		// 		SheetItemId: sheet_item.id,
+		// 		checked: false
+		// 	}
+		// })
+
+		// await ParticipantSheetItem.bulkCreate(participant_sheet_datas)
+
+		res.status(200).json(new_sheet)
+	} catch (err) {
+		console.error(err)
+		res.status(500).send({ok: false, message: "could not create sheet"})
+	}
 
 }

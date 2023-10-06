@@ -22,13 +22,23 @@ export function CreateSheet() {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		try {
-			await axios.post(process.env.REACT_APP_BACKEND_URL + '/sheet', {name, items});
+		axios({
+			method: 'post',
+			url: `${process.env.REACT_APP_BACKEND_URL}/sheets/`,
+			data: { name, items },
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			withCredentials: true
+
+		}).then(() => {
 			alert('Sheet created successfully!');
 			navigate('/sheets');
-		} catch (error) {
-			console.error('Error creating sheet:', error);
-		}
+
+		}).catch(err => {
+			console.error('Error creating sheet:', err);
+
+		})
 	};
 
 	const handleDelete = (index: number) => {
@@ -36,6 +46,12 @@ export function CreateSheet() {
 		newItems.splice(index, 1);
 		setItems(newItems);
 	};
+
+	const createNewItem = () => {
+		setItems(prevItems => {
+			return [...prevItems, {text: ''}]
+		})
+	}
 
 	return (
 		<div className={'flex justify-center'}>
@@ -58,7 +74,8 @@ export function CreateSheet() {
 						Sheet Items
 					</h2>
 					<div>
-						{items.map((item, index) => (
+
+						{items.slice(0,-1).map((item, index) => (
 							<label key={index} className={'flex flex-col gap-1 pb-3'}>
 								<div>
 									Sheet Item {index + 1}:
@@ -69,19 +86,51 @@ export function CreateSheet() {
 										type="text"
 										value={item.text}
 										onChange={(e) => handleItemChange(e, index)}
+										onKeyDown={(e) => {
+											if (e.key === 'Enter') {
+												e.preventDefault();
+												createNewItem();
+											}
+										}}
 										required
 									/>
-									<button type="button" onClick={() => handleDelete(index)}>
+									<button type="button" onClick={() => handleDelete(index)} tabIndex={-1}>
 										<FontAwesomeIcon icon={faTrash}/>
 									</button>
-								</div></label>
+								</div>
+							</label>
 						))}
+
+						<label key={items.length} className={'flex flex-col gap-1 pb-3'}>
+							<div>
+								New Sheet Item
+							</div>
+							<div className={'flex gap-1'}>
+								<input
+									className={'px-2 py-1 bg-background-default border-[1px] border-primary-default rounded-md'}
+									type="text"
+									value={items[items.length-1].text}
+									onChange={(e) => handleItemChange(e, items.length-1)}
+									onKeyDown={(e) => {
+										if (e.key === 'Enter') {
+											e.preventDefault();
+											createNewItem();
+										}
+									}}
+									required
+								/>
+								<button type="button" onClick={() => handleDelete(items.length-1)}>
+									<FontAwesomeIcon icon={faTrash}/>
+								</button>
+							</div>
+						</label>
+
 					</div>
-					<div className={'flex justify-end'}>
+					<div className={''}>
 						<button
 							className={'border-[1px] border-primary-default rounded-md px-2 py-1'}
 							type="button"
-							onClick={() => setItems([...items, {text: ''}])}
+							onClick={createNewItem}
 						>
 							Add Item
 						</button>

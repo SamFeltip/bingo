@@ -1,6 +1,6 @@
 
 const axios = require("axios");
-const db = require("../db/models")
+const {User, Participant} = require("../db/models")
 const jwt = require("jsonwebtoken");
 
 
@@ -8,10 +8,25 @@ exports.getUser = (req, res) => {
     res.send('GET request to the user page!');
 };
 
-exports.getUsers = (request, response) => {
+exports.getUsers = (req, res) => {
 
-	db.User.findAll().then(users => {
-		response.json(users)
+	const sheet_id = req.query?.sheet_id
+
+	let where_condition = true
+	if(sheet_id){
+		where_condition = {SheetId: sheet_id}
+	}
+
+	User.findAll({
+		attributes: ["image", "name", "id"],
+		include: {
+			model: Participant,
+			attributes: ["isOwner"],
+			where: where_condition,
+			required: false
+		}
+	}).then(users => {
+		res.json(users)
 	}).catch((err) => {
 		throw err;
 	})
@@ -20,7 +35,7 @@ exports.getUsers = (request, response) => {
 exports.getUserById = (request, response) => {
     const id = parseInt(request.params.id)
 
-	db.User.findByPk(id)
+	User.findByPk(id)
 		.then(user => {
 			response.status(200).json(user)
 		})
@@ -46,7 +61,7 @@ exports.createUser = async (req, res) => {
 
         const {name, avatar_url} = user_response.data
 
-		db.User.create({
+		User.create({
 			name: name,
 			email: email,
 			image: avatar_url
