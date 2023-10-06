@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useNotificationContext} from "../../hooks/useNotificationContext";
 import {NotificationMethods} from "../../contexts/NotificationContext";
+import {ParticipantProps} from "../../types/ParticipantProps";
 
 
 type ParticipantSheetItemProps = {
@@ -18,8 +19,9 @@ export function Sheet() {
 	const [loading, setLoading] = useState(false)
 	const {setNotification} = useNotificationContext();
 	const navigate = useNavigate();
-	const [participantSheetItems, setParticipantSheetItems] = useState<ParticipantSheetItemProps[]>([])
 
+	const [participantSheetItems, setParticipantSheetItems] = useState<ParticipantSheetItemProps[]>([])
+	const [participant, setParticipant] = useState<ParticipantProps>()
 
 	const {id: sheet_id} = useParams()
 
@@ -41,6 +43,7 @@ export function Sheet() {
 				return res.json()
 			}
 		}).then((sheet) => {
+			setParticipant(sheet.Participants[0])
 			setParticipantSheetItems(sheet.Participants[0].ParticipantSheetItems)
 			setLoading(false)
 
@@ -76,16 +79,23 @@ export function Sheet() {
 	}
 
 	const start_game_message = (
-		<div className={'min-w-[300px] max-w-[700px] text-center'}>
-			<div>
-				create a game and invite friends to get started!
-			</div>
-			<div>
-				<Link to={'/participants/' + sheet_id} className={'bg-accent-default text-primary-default py-1 px-3 rounded-md '}>
-					Get started
-				</Link>
-			</div>
-		</div>);
+		participant?.isOwner
+			? (<div className={'min-w-[300px] max-w-[700px] text-center'}>
+				<div>
+					invite friends to start the game!
+				</div>
+				<div>
+					<Link to={'/participants/' + sheet_id}
+						  className={'bg-accent-default text-primary-default py-1 px-3 rounded-md '}>
+						Get started
+					</Link>
+				</div>
+			</div>)
+			: (
+				<div>
+					The creator of this bingo game needs to create the bingo sheets before you can begin
+				</div>
+			));
 
 	return (
 		<div className={"py-3 px-5 flex justify-center"}>

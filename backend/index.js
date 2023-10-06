@@ -45,6 +45,8 @@ app.use('/sheets', sheetRoutes);
 const participantSheetItemRoutes = require('./routes/participantSheetItemRoutes');
 app.use('/participantSheetItems', participantSheetItemRoutes);
 
+const participantRoutes = require('./routes/participantRoutes');
+app.use('/participants', participantRoutes);
 
 const port = process.env.PORT || '4000';
 

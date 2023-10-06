@@ -1,5 +1,5 @@
 export type ParticipantProps = {
-	id: number;
+	id: string;
 	UserId: string;
 	SheetId: string;
 	isOwner: Boolean;

@@ -4,8 +4,7 @@ const {Sheet, SheetItem} = require("../models");
 
 module.exports = {
 	up: async (queryInterface, Sequelize) => {
-		const friday_night_bingo = await Sheet.findOne({where: {name: 'Friday Night Bingo'} })
-		const sheet = friday_night_bingo.dataValues
+		const sunday_funday_bingo = await Sheet.findOne({where: {name: 'Sunday Funday Bingo'} })
 
 		const sheetItemsData = [
 			"John spills their drink",
@@ -36,11 +35,11 @@ module.exports = {
 		];
 
 		for (const itemText of sheetItemsData) {
-			const sheetItem = await SheetItem.create({
+			await SheetItem.create({
 				text: itemText,
 				createdAt: new Date(),
 				updatedAt: new Date(),
-				SheetId: friday_night_bingo.id
+				SheetId: sunday_funday_bingo.id
 			});
 		}
 	},

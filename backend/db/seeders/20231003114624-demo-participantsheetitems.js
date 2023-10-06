@@ -11,8 +11,8 @@ module.exports = {
 		const participants = await Participant.findAll();
 		console.log(participants[0])
 
-		const friday_night_bingo_sheet = await Sheet.findOne({where: {name: 'Friday Night Bingo'}})
-		const fnb_sheet_items = await SheetItem.findAll({where: {SheetId: friday_night_bingo_sheet.id}})
+		const sunday_funday_bingo = await Sheet.findOne({where: {name: 'Sunday Funday Bingo'}})
+		const fnb_sheet_items = await SheetItem.findAll({where: {SheetId: sunday_funday_bingo.id}})
 
 		// random order for the sheet items
 		const participant_sheet_item_indexes = [
@@ -26,7 +26,7 @@ module.exports = {
 
 			for (let sheet_item_index = 0; sheet_item_index < 25; sheet_item_index++) {
 
-				const participant_sheet_item = await ParticipantSheetItem.create({
+				await ParticipantSheetItem.create({
 					checked: false,
 					position: participant_sheet_item_indexes[participant_index][sheet_item_index], //random position
 					createdAt: new Date(),
