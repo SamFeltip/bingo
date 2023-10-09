@@ -8,17 +8,6 @@ exports.getSheetById = (req, res) => {
 	const {user_id} = jwt.verify(session_token, process.env.JWT_SECRET)
 	console.log(`user id: ${user_id}, sheet id: ${sheet_id}`)
 
-	// sequelize.query(
-	// 		'SELECT PSI.id, P."isOwner", PSI.position, SI.text, PSI.checked FROM "Sheets" INNER JOIN "Participants" P on "Sheets".id = P."SheetId" INNER JOIN "ParticipantSheetItems" PSI on P.id = PSI."ParticipantId" INNER JOIN "SheetItems" SI on SI.id = PSI."SheetItemId" WHERE "Sheets".id = :sheet_id AND P."UserId" = :user_id ORDER BY PSI.position;',
-	// 		{
-	// 			replacements: {
-	// 				sheet_id: sheet_id,
-	// 				user_id: user_id
-	// 			},
-	// 			type: QueryTypes.SELECT
-	// 		}
-	// 	)
-
 	Sheet.findByPk(sheet_id, {
 		attributes: ['name'],
 		include: [
@@ -42,10 +31,10 @@ exports.getSheetById = (req, res) => {
 		],
 		order: [[Participant, ParticipantSheetItem, 'position', 'ASC']]
 	}).then(sheet => {
-		res.status(200).json(sheet)
+		res.status(200).json({ok: true, sheet})
 	}).catch(error => {
 		console.error(error)
-		res.json({error})
+		res.status(501).json({ok: false, error})
 	})
 }
 ;

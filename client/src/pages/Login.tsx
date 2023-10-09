@@ -21,7 +21,7 @@ function Login() {
 
 		const getAccessToken = async (codeParam: String) => {
 			try {
-
+				console.log(`${process.env.REACT_APP_BACKEND_URL}/auth/getAccessToken?code=` + codeParam)
 				await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/getAccessToken?code=` + codeParam, {
 					method: "POST",
 					credentials: 'include'

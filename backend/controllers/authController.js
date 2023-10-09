@@ -11,7 +11,7 @@ exports.deleteSessionCookie = async (req, res) => {
 };
 
 exports.getAccessToken = async (req, res) => {
-
+	console.log('something')
 	try {
 
 		if(!req.query?.code){

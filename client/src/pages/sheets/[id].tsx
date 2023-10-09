@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useNotificationContext} from "../../hooks/useNotificationContext";
 import {NotificationMethods} from "../../contexts/NotificationContext";
 import {ParticipantProps} from "../../types/ParticipantProps";
-
+import axios from "axios";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faGear} from "@fortawesome/free-solid-svg-icons";
 
 type ParticipantSheetItemProps = {
 	id: number;
@@ -18,35 +20,62 @@ export function Sheet() {
 
 	const [loading, setLoading] = useState(false)
 	const {setNotification} = useNotificationContext();
-	const navigate = useNavigate();
 
 	const [participantSheetItems, setParticipantSheetItems] = useState<ParticipantSheetItemProps[]>([])
 	const [participant, setParticipant] = useState<ParticipantProps>()
 
 	const {id: sheet_id} = useParams()
 
+	const create_new_participant_sheet_items = (participant_id: string) => {
+		axios({
+			method: 'post',
+			url: `${process.env.REACT_APP_BACKEND_URL}/participantSheetItems/${participant_id}`,
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			withCredentials: true
+		}).then((res) => {
+			if(res.data.ok){
+				setParticipantSheetItems(res.data.ParticipantSheetItems)
+			}else{
+				console.error(res.data.message)
+				setNotification({type: NotificationMethods.Error, message: res.data.message})
+			}
+		}).catch(error => {
+			console.error(error)
+			setNotification({type: NotificationMethods.Error, message: 'unable to build a new sheet'})
+
+		})
+	}
+
 	useEffect(() => {
 		setLoading(true)
 
-		fetch(`${process.env.REACT_APP_BACKEND_URL}/sheets/` + sheet_id, {
-			method: "GET",
-			credentials: 'include'
+		axios({
+			method: 'get',
+			url: `${process.env.REACT_APP_BACKEND_URL}/sheets/${sheet_id}`,
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			withCredentials: true
+
 		}).then((res) => {
-			if (!res.ok) {
-				console.error(res)
-				throw Error(`${res.status}: ${res.statusText}`)
-			}
+			if (res.data.ok) {
+				const {sheet} = res.data
+				setParticipant(sheet.Participants[0])
 
-			if (res.status !== 200) {
-				navigate("/login?authenticatedUrl=" + "sheets/" + sheet_id)
+				if (sheet.Participants[0].ParticipantSheetItems.length == 0) {
+					create_new_participant_sheet_items(sheet.Participants[0].id)
+				} else {
+					setParticipantSheetItems(sheet.Participants[0].ParticipantSheetItems)
+				}
+
+				setLoading(false)
+
 			} else {
-				return res.json()
-			}
-		}).then((sheet) => {
-			setParticipant(sheet.Participants[0])
-			setParticipantSheetItems(sheet.Participants[0].ParticipantSheetItems)
-			setLoading(false)
+				setNotification({type: NotificationMethods.Error, message: res.data.message})
 
+			}
 		}).catch(err => {
 			setNotification({type: NotificationMethods.Error, message: err.message})
 		})
@@ -85,8 +114,10 @@ export function Sheet() {
 					invite friends to start the game!
 				</div>
 				<div>
-					<Link to={'/participants/' + sheet_id}
-						  className={'bg-accent-default text-primary-default py-1 px-3 rounded-md '}>
+					<Link
+						to={'/participants/' + sheet_id}
+						className={'bg-accent-default text-primary-default py-1 px-3 rounded-md '}
+					>
 						Get started
 					</Link>
 				</div>
@@ -105,7 +136,12 @@ export function Sheet() {
 					? start_game_message
 					: (
 						<div>
-							<div className={'pb-2 flex justify-end'}>
+							<div className={`pb-2 flex ${participant?.isOwner ? 'justify-between' : 'justify-end'}`}>
+								{participant?.isOwner && (
+									<Link to={'/participants/' + sheet_id}>
+										<FontAwesomeIcon icon={faGear}/>
+									</Link>
+								)}
 								<button className={'bg-accent-default text-primary-default py-1 px-3 rounded-md'}>
 									Submit
 								</button>

@@ -24,9 +24,10 @@ export const Participant: React.FC<ParticipantComponentProps> = ({user, handle_i
 						</button>
 					) : (
 						<button
-							onClick={() => {handle_invite({id, name, image, Participants})}}
+							disabled={participant?.isOwner}
+							onClick={() => {!participant.isOwner && handle_invite({id, name, image, Participants})}}
 							className={'bg-background-default border-primary-default border-[1px] px-3 rounded-md'}>
-							{participant.isOwner ? "Owner" : "Undo"}
+							{participant.isOwner ? "Owner" : "Remove"}
 						</button>
 					)}
 
