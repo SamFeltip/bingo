@@ -4,6 +4,5 @@ export type UserProps = {
 	image: string;
 	id: string;
 	name: string;
-	email: string;
-	Participants: ParticipantProps[] | null;
+	Participants: ParticipantProps[];
 };

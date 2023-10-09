@@ -1,12 +1,12 @@
 const express = require('express');
-const controllers = require('../controllers/participantSheetItemController');
+const controllers = require('../controllers/participantController');
 const requireAuth = require("../middleware/requireAuth");
 const router = express.Router();
 
 router.use(requireAuth)
 
 // Define your routes here
-router.patch('/:psi_id', controllers.toggleCheckedPSI);
-router.post('/:participant_id', controllers.createNewPSIs);
+router.post('/', controllers.createParticipant);
+router.delete('/', controllers.deleteParticipant);
 // Export the router
 module.exports = router;

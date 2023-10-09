@@ -7,13 +7,21 @@ module.exports = (sequelize, DataTypes) => {
 	class Sheet extends Model {
 		static associate(models) {
 			Sheet.belongsToMany(models.User, { through: models.Participant });
-			Sheet.hasMany(models.Participant);
-
-			Sheet.hasMany(models.SheetItem);
+			Sheet.hasMany(models.Participant, {
+				onDelete: 'CASCADE'
+			});
+			Sheet.hasMany(models.SheetItem, {
+				as: 'SheetItems',
+				onDelete: 'CASCADE'
+			});
 		}
 	}
-
 	Sheet.init({
+		id: {
+			type: DataTypes.INTEGER,
+			autoIncrement: true,
+			primaryKey: true
+		},
 		name: DataTypes.STRING,
 	}, {
 		sequelize,

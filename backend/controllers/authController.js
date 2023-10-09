@@ -11,33 +11,32 @@ exports.deleteSessionCookie = async (req, res) => {
 };
 
 exports.getAccessToken = async (req, res) => {
-
 	try {
 
 		if(!req.query?.code){
 			res.status(200).send({ success: false, data: 'no code given' });
+		} else {
+
+			const response = await axios.post("https://github.com/login/oauth/access_token", {
+				client_id: process.env.GITHUB_CLIENT_ID,
+				client_secret: process.env.GITHUB_CLIENT_SECRET,
+				code: req.query.code,
+			}, {
+				headers: {
+					accept: 'application/json',
+				},
+			})
+
+			const {access_token} = response.data;
+
+			if(!access_token){
+				res.status(200).send({ success: false, data: 'no access token given. code may have been invalid' });
+			}else{
+				res.status(200)
+					.cookie('oauth_access_token', access_token, { httpOnly: true, secure: true, sameSite: 'none' })
+					.json({ message: 'Access token cookie created' });
+			}
 		}
-
-		const response = await axios.post("https://github.com/login/oauth/access_token", {
-			client_id: process.env.GITHUB_CLIENT_ID,
-			client_secret: process.env.GITHUB_CLIENT_SECRET,
-			code: req.query.code,
-		}, {
-			headers: {
-				accept: 'application/json',
-			},
-		})
-
-		const {access_token} = response.data;
-
-		if(!access_token){
-			res.status(200).send({ success: false, data: 'no access token given. code may have been invalid' });
-		}else{
-			res.status(200)
-			.cookie('oauth_access_token', access_token, { httpOnly: true, secure: true, sameSite: 'none' })
-			.json({ message: 'Access token cookie created' });
-		}
-
 
 	} catch (error) {
 		console.error('There has been a problem with your fetch operation:', error);

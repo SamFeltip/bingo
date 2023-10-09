@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {useAuthContext} from "../hooks/useAuthContext";
 import { useSignup } from "../hooks/useSignup";
+import {useNavigate} from "react-router-dom";
 
 function Login() {
 	const [bannerMessage, setBannerMessage] = useState('')
 	const {dispatch} = useAuthContext()
 	const {signup, error, isLoading} = useSignup()
+	const navigate = useNavigate();
 
 	const loginWithGithub = () => {
 		window.location.assign("https://github.com/login/oauth/authorize?client_id=" + process.env.REACT_APP_GITHUB_CLIENT_ID)
@@ -19,7 +21,7 @@ function Login() {
 
 		const getAccessToken = async (codeParam: String) => {
 			try {
-
+				console.log(`${process.env.REACT_APP_BACKEND_URL}/auth/getAccessToken?code=` + codeParam)
 				await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/getAccessToken?code=` + codeParam, {
 					method: "POST",
 					credentials: 'include'
@@ -43,7 +45,7 @@ function Login() {
 
 							const redirect = localStorage.getItem("redirectWhenAuthenticated") || ""
 							localStorage.removeItem("redirectWhenAuthenticated")
-							window.location.replace('/' + redirect)
+							navigate('/' + redirect)
 						})
 
 					}else{
@@ -57,7 +59,7 @@ function Login() {
 
 						const redirect = localStorage.getItem("redirectWhenAuthenticated") || ""
 						localStorage.removeItem("redirectWhenAuthenticated")
-						window.location.replace('/' + redirect)
+						navigate('/' + redirect)
 					}
 
 				}

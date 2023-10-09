@@ -23,7 +23,7 @@ export function Header() {
 
 	const handleLogOut = async () => {
 		await logout()
-		window.location.replace("/")
+		navigate('/');
 		setNotification({type: NotificationMethods.Success, message: "Successfully Logged out"})
 
 	}
