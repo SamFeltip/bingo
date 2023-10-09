@@ -8,5 +8,6 @@ router.use(requireAuth)
 // Define your routes here
 router.post('/', controllers.createParticipant);
 router.delete('/', controllers.deleteParticipant);
+router.get('/', controllers.getParticipant)
 // Export the router
 module.exports = router;

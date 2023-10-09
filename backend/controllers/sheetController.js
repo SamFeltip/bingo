@@ -4,10 +4,8 @@ const jwt = require("jsonwebtoken");
 // show
 exports.getSheetById = (req, res) => {
 	const sheet_id = parseInt(req.params.sheet_id)
-
 	const {session_token} = req.cookies
 	const {user_id} = jwt.verify(session_token, process.env.JWT_SECRET)
-	console.log(`user id: ${user_id}, sheet id: ${sheet_id}`)
 
 	Sheet.findByPk(sheet_id, {
 		attributes: ['name'],

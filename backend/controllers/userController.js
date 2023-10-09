@@ -21,7 +21,6 @@ exports.getUsers = (req, res) => {
 		attributes: ["image", "name", "id"],
 		include: {
 			model: Participant,
-			attributes: ["isOwner"],
 			where: where_condition,
 			required: false
 		}
