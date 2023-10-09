@@ -1,6 +1,7 @@
 const {Sheet, Participant, User, ParticipantSheetItem, SheetItem} = require("../db/models")
 const jwt = require("jsonwebtoken");
 
+// show
 exports.getSheetById = (req, res) => {
 	const sheet_id = parseInt(req.params.sheet_id)
 
@@ -34,11 +35,11 @@ exports.getSheetById = (req, res) => {
 		res.status(200).json({ok: true, sheet})
 	}).catch(error => {
 		console.error(error)
-		res.status(501).json({ok: false, error})
+		res.status(500).json({ok: false, error})
 	})
-}
-;
+};
 
+// index
 exports.getSheets = (req, res) => {
 
 	if (!req.current_user) {
@@ -62,6 +63,7 @@ exports.getSheets = (req, res) => {
 
 };
 
+// create
 exports.createSheet = async (req, res) => {
 
 	const {session_token} = req.cookies

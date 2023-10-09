@@ -1,15 +1,14 @@
 const jwt = require("jsonwebtoken");
 const {SheetItem, ParticipantSheetItem, Participant} = require("../db/models")
+const {createNewParticipantSheetItems} = require("../helpers/participantSheetItemHelper");
 
-exports.createNewPSI = async (req, res) => {
+exports.createNewPSIs = async (req, res) => {
 	const participant_id = parseInt(req.params.participant_id)
 
 	const {session_token} = req.cookies
 	const {user_id} = jwt.verify(session_token, process.env.JWT_SECRET)
 
-	const psi = await ParticipantSheetItem.findOne({
-		where: {ParticipantId: participant_id}
-	})
+	const psi = await ParticipantSheetItem.findOne({where: {ParticipantId: participant_id}})
 
 	const participant = await Participant.findByPk(participant_id)
 
@@ -31,31 +30,22 @@ exports.createNewPSI = async (req, res) => {
 				where: {
 					SheetId: participant.SheetId
 				}
-			}).then(sheet_items => {
-				let participant_sheet_items = []
-				try {
-					sheet_items.dataValues.map(async sheet_item => {
+			}).then((sheet_items_response) => {
+				return sheet_items_response.map(sheet_item => sheet_item.dataValues)
+			}).then(async sheet_items => {
 
-						let participant_sheet_item = await ParticipantSheetItem.create({
-							SheetItemId: sheet_item.id,
-							ParticipantId: participant_id,
-							position: Math.floor(Math.random() * sheet_items.length),
-							isChecked: false
-						})
+				createNewParticipantSheetItems(participant_id, sheet_items).then(participant_sheet_items => {
+					console.log(participant_sheet_items)
+					res.status(200).json({ok: true, participant_sheet_items})
+				}).catch(err => {
 
-						participant_sheet_items.push(participant_sheet_item)
-					})
-					res.status(200).json({ok: true, ParticipantSheetItems: participant_sheet_items})
-
-				} catch (err) {
-					res.status(501).json({ok: false, message: 'could not create participant sheet items'})
-
-				}
-
+					console.error(err)
+					res.status(500).json({ok: false, message: 'could not create participant sheet items'})
+				})
 
 			}).catch(err => {
 				console.error(err)
-				res.status(501).json({ok: false, message: 'could not find sheet items'})
+				res.status(500).json({ok: false, message: 'could not find sheet items'})
 
 			})
 			break

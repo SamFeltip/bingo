@@ -10,14 +10,13 @@ import {
 } from "react-router-dom"
 
 import {NotificationContextProvider} from "./contexts/NotificationContext";
-import {User} from "./pages/users/[id]";
+import {User} from "./pages/users/show";
 import {Users} from "./pages/users";
 
-import {Sheet} from "./pages/sheets/[id]";
+import {ShowSheet} from "./pages/sheets/show";
 import {Sheets} from "./pages/sheets";
 import {CreateSheet} from "./pages/sheets/new";
-
-import {Participants} from "./pages/participants/[sheet_id]";
+import {EditSheet} from "./pages/sheets/edit";
 
 function App() {
 
@@ -30,11 +29,11 @@ function App() {
 						<Route path="users/:id" element={<User/>}/>
 						<Route path="users" element={<Users/>}/>
 
-						<Route path="sheets/:id" element={<Sheet/>}/>
+						<Route path="sheets/:id" element={<ShowSheet/>}/>
 						<Route path="sheets" element={<Sheets/>}/>
 						<Route path="sheets/new" element={<CreateSheet/>}/>
 
-						<Route path="participants/:sheet_id" element={<Participants/>}/>
+						<Route path="sheets/:sheet_id/edit" element={<EditSheet/>}/>
 
 
 						<Route path="login" element={<Login/>}/>

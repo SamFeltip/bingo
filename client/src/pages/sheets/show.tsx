@@ -16,7 +16,7 @@ type ParticipantSheetItemProps = {
 	checked: boolean;
 }
 
-export function Sheet() {
+export function ShowSheet() {
 
 	const [loading, setLoading] = useState(false)
 	const {setNotification} = useNotificationContext();
@@ -26,7 +26,7 @@ export function Sheet() {
 
 	const {id: sheet_id} = useParams()
 
-	const create_new_participant_sheet_items = (participant_id: string) => {
+	const createParticipantSheetItems = (participant_id: string) => {
 		axios({
 			method: 'post',
 			url: `${process.env.REACT_APP_BACKEND_URL}/participantSheetItems/${participant_id}`,
@@ -36,7 +36,8 @@ export function Sheet() {
 			withCredentials: true
 		}).then((res) => {
 			if(res.data.ok){
-				setParticipantSheetItems(res.data.ParticipantSheetItems)
+				console.log(res.data)
+				setParticipantSheetItems(res.data.participant_sheet_items)
 			}else{
 				console.error(res.data.message)
 				setNotification({type: NotificationMethods.Error, message: res.data.message})
@@ -65,7 +66,7 @@ export function Sheet() {
 				setParticipant(sheet.Participants[0])
 
 				if (sheet.Participants[0].ParticipantSheetItems.length == 0) {
-					create_new_participant_sheet_items(sheet.Participants[0].id)
+					createParticipantSheetItems(sheet.Participants[0].id)
 				} else {
 					setParticipantSheetItems(sheet.Participants[0].ParticipantSheetItems)
 				}
@@ -138,7 +139,7 @@ export function Sheet() {
 						<div>
 							<div className={`pb-2 flex ${participant?.isOwner ? 'justify-between' : 'justify-end'}`}>
 								{participant?.isOwner && (
-									<Link to={'/participants/' + sheet_id}>
+									<Link to={'/sheets/' + sheet_id + "/edit"}>
 										<FontAwesomeIcon icon={faGear}/>
 									</Link>
 								)}
@@ -165,7 +166,7 @@ export function Sheet() {
 											)
 										}
 									>
-										{pb?.SheetItem.text}
+										{pb?.SheetItem?.text}
 									</div>
 								)}
 							</div>

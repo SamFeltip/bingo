@@ -7,6 +7,6 @@ router.use(requireAuth)
 
 // Define your routes here
 router.patch('/:psi_id', controllers.toggleCheckedPSI);
-router.post('/:participant_id', controllers.createNewPSI);
+router.post('/:participant_id', controllers.createNewPSIs);
 // Export the router
 module.exports = router;

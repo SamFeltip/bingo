@@ -10,7 +10,7 @@ import {SheetProps} from "../../types/SheetProps";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowAltCircleRight} from "@fortawesome/free-solid-svg-icons";
 
-export function Participants() {
+export function EditSheet() {
 
 	const [uninvitedUsers, setUninvitedUsers] = useState<UserProps[]>([])
 	const [invitedUsers, setInvitedUsers] = useState<UserProps[]>([])
