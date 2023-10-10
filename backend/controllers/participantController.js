@@ -23,7 +23,7 @@ const user_permitted = async (inviting_user_id, sheet_id, session_token) => {
 		}
 	})
 
-	const INVALID_CREDENTIALS = !current_user_participant || !current_user_participant.isOwner
+	const INVALID_CREDENTIALS = !current_user_participant
 	const INVITING_USER_IS_PARTICIPANT = !!existing_participant
 
 	if (INVALID_CREDENTIALS) {return {message: INVALID_CREDENTIALS_MESSAGE}}
