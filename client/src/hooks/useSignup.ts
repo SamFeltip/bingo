@@ -6,7 +6,7 @@ export const useSignup = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const { dispatch } = useAuthContext();
 
-	const signup = async (email: String) => {
+	const signup = async (email: string) => {
 		setIsLoading(true);
 		console.log("use signup hook is being used");
 

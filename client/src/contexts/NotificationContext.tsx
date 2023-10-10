@@ -32,18 +32,18 @@ const NotificationContextProvider: React.FC<{ children: ReactNode }> = ({ childr
 	}, [notification]);
 
 	const error_banner = (
-		<div className={`relative top-0 border-t-2 border-b-2 p-3 border-red-700 text-red-700 bg-red-50`}>
+		<div className={"relative top-0 border-t-2 border-b-2 p-3 border-red-700 text-red-700 bg-red-50"}>
 			{notification?.message}
 		</div>
 	);
 
 	const success_banner = (
-		<div className={`border-t-2 border-b-2 p-3 border-green-700 text-green-700 bg-green-50`}>
+		<div className={"border-t-2 border-b-2 p-3 border-green-700 text-green-700 bg-green-50"}>
 			{notification?.message}
 		</div>
 	);
 	const warning_banner = (
-		<div className={`border-t-2 border-b-2 p-3 border-yellow-700 text-yellow-700 bg-yellow-50`}>
+		<div className={"border-t-2 border-b-2 p-3 border-yellow-700 text-yellow-700 bg-yellow-50"}>
 			{notification?.message}
 		</div>
 	);

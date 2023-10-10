@@ -16,7 +16,7 @@ export function EditSheet() {
 	const [loading, setLoading] = useState(false);
 	const [sheet, setSheet] = useState<SheetProps>();
 
-	let { sheet_id } = useParams();
+	const { sheet_id } = useParams();
 	const { setNotification } = useNotificationContext();
 
 	useEffect(() => {

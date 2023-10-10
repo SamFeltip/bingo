@@ -21,7 +21,7 @@ function Login() {
 		const codeParam = urlParams.get("code");
 		const redirectParam = urlParams.get("authenticatedUrl");
 
-		const getAccessToken = async (codeParam: String) => {
+		const getAccessToken = async (codeParam: string) => {
 			try {
 				console.log(`${process.env.REACT_APP_BACKEND_URL}/auth/getAccessToken?code=` + codeParam);
 				await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/getAccessToken?code=` + codeParam, {
@@ -39,7 +39,7 @@ function Login() {
 				if (!get_user_data_response.success) {
 					setBannerMessage(get_user_data_response.data);
 				} else {
-					let { current_user } = get_user_data_response.data;
+					const { current_user } = get_user_data_response.data;
 
 					if (!current_user.id) {
 						setBannerMessage("creating new account...");

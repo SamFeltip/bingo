@@ -30,7 +30,9 @@ const AuthContext = createContext<{
 	dispatch: React.Dispatch<AuthAction>;
 }>({
 	user: null,
-	dispatch: () => {},
+	dispatch: () => {
+		console.warn("Dispatch not implemented yet");
+	},
 });
 
 const AuthContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {

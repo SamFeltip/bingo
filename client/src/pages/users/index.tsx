@@ -27,5 +27,9 @@ export function Users() {
 			});
 	}, []);
 
-	return <div className={"py-3 px-7"}>{loading ? "loading..." : users.map((user) => <User {...user} />)}</div>;
+	return (
+		<div className={"py-3 px-7"}>
+			{loading ? "loading..." : users.map((user) => <User key={user.id} {...user} />)}
+		</div>
+	);
 }
