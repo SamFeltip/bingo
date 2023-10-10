@@ -1,5 +1,5 @@
 // Import the shuffle function
-const {shuffle} = require('../helpers/participantSheetItemHelper');
+const { shuffle } = require("../helpers/participantSheetItemHelper");
 
 // Define a helper function to check if two arrays are equal
 const arrayEqual = (a, b) => {
@@ -7,12 +7,12 @@ const arrayEqual = (a, b) => {
 };
 
 // Write a test suite for the shuffle function
-describe('shuffle', () => {
+describe("shuffle", () => {
 	// Test that the shuffle function returns an array of the same length as the input
-	test('returns an array of the same length as the input', () => {
+	test("returns an array of the same length as the input", () => {
 		// Define some input arrays
 		const input1 = [1, 2, 3, 4, 5];
-		const input2 = ['a', 'b', 'c', 'd', 'e'];
+		const input2 = ["a", "b", "c", "d", "e"];
 		const input3 = [];
 
 		// Shuffle the input arrays
@@ -27,10 +27,10 @@ describe('shuffle', () => {
 	});
 
 	// Test that the shuffle function returns an array with the same elements as the input
-	test('returns an array with the same elements as the input', () => {
+	test("returns an array with the same elements as the input", () => {
 		// Define some input arrays
 		const input1 = [1, 2, 3, 4, 5];
-		const input2 = ['a', 'b', 'c', 'd', 'e'];
+		const input2 = ["a", "b", "c", "d", "e"];
 		const input3 = [];
 
 		// Shuffle the input arrays
@@ -45,10 +45,10 @@ describe('shuffle', () => {
 	});
 
 	// Test that the shuffle function returns an array with a different order than the input
-	test('returns an array with a different order than the input', () => {
+	test("returns an array with a different order than the input", () => {
 		// Define some input arrays
 		const input1 = [1, 2, 3, 4, 5];
-		const input2 = ['a', 'b', 'c', 'd', 'e'];
+		const input2 = ["a", "b", "c", "d", "e"];
 		const input3 = [];
 
 		// Shuffle the input arrays

@@ -1,7 +1,5 @@
-'use strict';
-const {
-	Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
 	class ParticipantSheetItem extends Model {
@@ -11,17 +9,20 @@ module.exports = (sequelize, DataTypes) => {
 		}
 	}
 
-	ParticipantSheetItem.init({
-		id: {
-			type: DataTypes.INTEGER,
-			autoIncrement: true,
-			primaryKey: true
+	ParticipantSheetItem.init(
+		{
+			id: {
+				type: DataTypes.INTEGER,
+				autoIncrement: true,
+				primaryKey: true,
+			},
+			checked: DataTypes.BOOLEAN,
+			position: DataTypes.INTEGER,
 		},
-		checked: DataTypes.BOOLEAN,
-		position: DataTypes.INTEGER
-	}, {
-		sequelize,
-		modelName: 'ParticipantSheetItem',
-	});
+		{
+			sequelize,
+			modelName: "ParticipantSheetItem",
+		},
+	);
 	return ParticipantSheetItem;
 };

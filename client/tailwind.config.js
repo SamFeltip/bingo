@@ -1,10 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-const defaultTheme = require('tailwindcss/defaultTheme');
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
-    content: [
-        "./src/**/*.{js,jsx,ts,tsx}",
-    ],
+	content: ["./src/**/*.{js,jsx,ts,tsx}"],
 	theme: {
 		colors: () => ({
 			primary: {
@@ -18,13 +16,13 @@ module.exports = {
 			background: {
 				default: "#282828",
 				hover: "#545454",
-			}
+			},
 		}),
 		extend: {
 			fontFamily: {
-				libre: ['"Questrial"', ...defaultTheme.fontFamily.sans]
-			}
-		}
+				libre: ['"Questrial"', ...defaultTheme.fontFamily.sans],
+			},
+		},
 	},
-    plugins: [],
-}
+	plugins: [],
+};

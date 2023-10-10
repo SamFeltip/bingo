@@ -1,4 +1,4 @@
-import {ParticipantProps} from "./ParticipantProps";
+import { ParticipantProps } from "./ParticipantProps";
 
 export type UserProps = {
 	image: string;

@@ -1,7 +1,5 @@
-'use strict';
-const {
-	Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
 	class Participant extends Model {
@@ -12,16 +10,19 @@ module.exports = (sequelize, DataTypes) => {
 		}
 	}
 
-	Participant.init({
-		id: {
-			type: DataTypes.INTEGER,
-			autoIncrement: true,
-			primaryKey: true
+	Participant.init(
+		{
+			id: {
+				type: DataTypes.INTEGER,
+				autoIncrement: true,
+				primaryKey: true,
+			},
+			isOwner: DataTypes.BOOLEAN,
 		},
-		isOwner: DataTypes.BOOLEAN
-	}, {
-		sequelize,
-		modelName: 'Participant',
-	});
+		{
+			sequelize,
+			modelName: "Participant",
+		},
+	);
 	return Participant;
 };
