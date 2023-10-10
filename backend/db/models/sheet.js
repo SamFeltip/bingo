@@ -1,31 +1,32 @@
-'use strict';
-const {
-	Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
 	class Sheet extends Model {
 		static associate(models) {
 			Sheet.belongsToMany(models.User, { through: models.Participant });
 			Sheet.hasMany(models.Participant, {
-				onDelete: 'CASCADE'
+				onDelete: "CASCADE",
 			});
 			Sheet.hasMany(models.SheetItem, {
-				as: 'SheetItems',
-				onDelete: 'CASCADE'
+				as: "SheetItems",
+				onDelete: "CASCADE",
 			});
 		}
 	}
-	Sheet.init({
-		id: {
-			type: DataTypes.INTEGER,
-			autoIncrement: true,
-			primaryKey: true
+	Sheet.init(
+		{
+			id: {
+				type: DataTypes.INTEGER,
+				autoIncrement: true,
+				primaryKey: true,
+			},
+			name: DataTypes.STRING,
 		},
-		name: DataTypes.STRING,
-	}, {
-		sequelize,
-		modelName: 'Sheet',
-	});
+		{
+			sequelize,
+			modelName: "Sheet",
+		},
+	);
 	return Sheet;
 };

@@ -1,4 +1,4 @@
-import {UserProps} from "./UserProps";
+import { UserProps } from "./UserProps";
 
 export type SheetProps = {
 	id: string;
@@ -6,6 +6,6 @@ export type SheetProps = {
 	Participants: {
 		id: string;
 		User: UserProps;
-		isOwner: boolean
+		isOwner: boolean;
 	}[];
 };

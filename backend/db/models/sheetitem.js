@@ -1,7 +1,5 @@
-'use strict';
-const {
-	Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
 	class SheetItem extends Model {
 		/**
@@ -15,16 +13,19 @@ module.exports = (sequelize, DataTypes) => {
 		}
 	}
 
-	SheetItem.init({
-		id: {
-			type: DataTypes.INTEGER,
-			autoIncrement: true,
-			primaryKey: true
+	SheetItem.init(
+		{
+			id: {
+				type: DataTypes.INTEGER,
+				autoIncrement: true,
+				primaryKey: true,
+			},
+			text: DataTypes.STRING,
 		},
-		text: DataTypes.STRING
-	}, {
-		sequelize,
-		modelName: 'SheetItem',
-	});
+		{
+			sequelize,
+			modelName: "SheetItem",
+		},
+	);
 	return SheetItem;
 };

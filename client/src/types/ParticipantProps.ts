@@ -3,4 +3,4 @@ export type ParticipantProps = {
 	UserId: string;
 	SheetId: string;
 	isOwner: boolean;
-}
+};

@@ -1,10 +1,12 @@
-'use strict';
+"use strict";
 
-const {Sheet, SheetItem} = require("../models");
+const { Sheet, SheetItem } = require("../models");
 
 module.exports = {
 	up: async (queryInterface, Sequelize) => {
-		const sunday_funday_bingo = await Sheet.findOne({where: {name: 'Sunday Funday Bingo'} })
+		const sunday_funday_bingo = await Sheet.findOne({
+			where: { name: "Sunday Funday Bingo" },
+		});
 
 		const sheetItemsData = [
 			"John spills their drink",
@@ -31,7 +33,7 @@ module.exports = {
 			"Chris finds an unexpected plus one",
 			"Dan finds his new BFF",
 			"Emily talks about their favorite movie",
-			"someone can't stop laughing at a joke"
+			"someone can't stop laughing at a joke",
 		];
 
 		for (const itemText of sheetItemsData) {
@@ -39,14 +41,12 @@ module.exports = {
 				text: itemText,
 				createdAt: new Date(),
 				updatedAt: new Date(),
-				SheetId: sunday_funday_bingo.id
+				SheetId: sunday_funday_bingo.id,
 			});
 		}
 	},
 	down: async (queryInterface, Sequelize) => {
-
-		console.log('deleting sheet items')
-		await queryInterface.bulkDelete('SheetItems', null, {});
-
-	}
+		console.log("deleting sheet items");
+		await queryInterface.bulkDelete("SheetItems", null, {});
+	},
 };
