@@ -4,7 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon .",
+		"start:dev": "NODE_ENV=development nodemon .",
+		"start": "node .",
 		"debug": "nodemon --inspect-brk .",
 		"test": "jest",
 		"migrate:up": "npx sequelize-cli db:migrate",

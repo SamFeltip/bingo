@@ -19,6 +19,8 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.use(express.json());
+
+console.log("using cors to permit Access-control-allow-=origin. client url: ", process.env.CLIENT_URL);
 app.use(
 	cors({
 		origin: process.env.CLIENT_URL, // Allow CORS from your client's origin

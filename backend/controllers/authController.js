@@ -21,6 +21,7 @@ exports.getAccessToken = async (req, res) => {
 	console.log("get access token reached");
 	try {
 		if (!req.query?.code) {
+			console.error("no code given");
 			res.status(401).send({ success: false, data: "no code given" });
 		} else {
 			const response = await axios.post(
@@ -40,18 +41,20 @@ exports.getAccessToken = async (req, res) => {
 			const { access_token } = response.data;
 
 			if (!access_token) {
+				console.error("no access token found");
 				res.status(401).send({
 					success: false,
 					data: "no access token given. code may have been invalid",
 				});
 			} else {
+				console.log("creating cookie and returning successful message");
 				res.status(200)
 					.cookie("oauth_access_token", access_token, {
 						httpOnly: true,
 						secure: true,
 						sameSite: "none",
 					})
-					.json({ message: "Access token cookie created" });
+					.json({ success: true, message: "Access token cookie created" });
 			}
 		}
 	} catch (error) {
@@ -85,12 +88,9 @@ exports.getUserData = async (req, res) => {
 				});
 			}
 
-			res.status(200).json({ success: true, data: { current_user } });
+			res.status(200).json({ current_user });
 		} else {
-			res.status(400).json({
-				success: false,
-				data: { message: "no oauth cookie found in request" },
-			});
+			res.status(400).json({ message: "no oauth cookie found in request" });
 		}
 	} catch (error) {
 		console.error(error.message);

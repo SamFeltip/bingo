@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useSignup } from "../hooks/useSignup";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { NotificationMethods } from "../contexts/NotificationContext";
+import { useNotificationContext } from "../hooks/useNotificationContext";
 
 function Login() {
-	const [bannerMessage, setBannerMessage] = useState("");
 	const { dispatch } = useAuthContext();
 	const { signup, error, isLoading } = useSignup();
 	const navigate = useNavigate();
+	const { setNotification } = useNotificationContext();
 
 	const loginWithGithub = () => {
 		window.location.assign(
@@ -22,49 +25,59 @@ function Login() {
 		const redirectParam = urlParams.get("authenticatedUrl");
 
 		const getAccessToken = async (codeParam: string) => {
-			try {
-				console.log(`${process.env.REACT_APP_BACKEND_URL}/auth/getAccessToken?code=` + codeParam);
-				await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/getAccessToken?code=` + codeParam, {
-					method: "POST",
-					credentials: "include",
-				});
+			axios({
+				method: "post",
+				url: `${process.env.REACT_APP_BACKEND_URL}/auth/getAccessToken?code=` + codeParam,
+				headers: {
+					"Content-Type": "application/json",
+				},
+				withCredentials: true,
+			})
+				.then(() => {
+					console.log("get access token completed");
+					axios({
+						method: "GET",
+						url: `${process.env.REACT_APP_BACKEND_URL}/auth/getUserData`,
+						headers: {
+							"Content-Type": "application/json",
+						},
+						withCredentials: true,
+					}).then((get_user_data_response) => {
+						console.log(get_user_data_response);
+						const { current_user } = get_user_data_response.data;
 
-				const get_user_data_response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/getUserData`, {
-					method: "GET",
-					credentials: "include",
-				}).then((response) => {
-					return response.json();
-				});
+						if (!current_user.id) {
+							setNotification({
+								type: NotificationMethods.Warning,
+								message: "creating new account...",
+							});
 
-				if (!get_user_data_response.success) {
-					setBannerMessage(get_user_data_response.data);
-				} else {
-					const { current_user } = get_user_data_response.data;
+							signup(current_user.email).then(() => {
+								const redirect = localStorage.getItem("redirectWhenAuthenticated") || "";
+								localStorage.removeItem("redirectWhenAuthenticated");
+								navigate("/" + redirect);
+							});
+						} else {
+							dispatch({
+								type: "LOGIN",
+								payload: current_user,
+							});
 
-					if (!current_user.id) {
-						setBannerMessage("creating new account...");
-						signup(current_user.email).then(() => {
+							localStorage.setItem("current_user", JSON.stringify(current_user));
+
 							const redirect = localStorage.getItem("redirectWhenAuthenticated") || "";
 							localStorage.removeItem("redirectWhenAuthenticated");
 							navigate("/" + redirect);
-						});
-					} else {
-						dispatch({
-							type: "LOGIN",
-							payload: current_user,
-						});
-
-						localStorage.setItem("current_user", JSON.stringify(current_user));
-
-						const redirect = localStorage.getItem("redirectWhenAuthenticated") || "";
-						localStorage.removeItem("redirectWhenAuthenticated");
-						navigate("/" + redirect);
-					}
-				}
-			} catch (err) {
-				console.log("error!?");
-				console.error(err);
-			}
+						}
+					});
+				})
+				.catch((error) => {
+					console.error(error);
+					setNotification({
+						type: NotificationMethods.Error,
+						message: "unable to authenticate",
+					});
+				});
 		};
 
 		if (redirectParam) {
@@ -79,10 +92,7 @@ function Login() {
 
 	return (
 		<div className="flex text-center flex-col items-center py-[150px]">
-			<div>
-				{bannerMessage}
-				{error}
-			</div>
+			<div>{error}</div>
 			<div className={"w-[200px] border-2 border-gray-500 rounded-md p-5"}>
 				<h1 className={"font-bold text-lg pb-[50px]"}>Log in or Sign up</h1>
 
