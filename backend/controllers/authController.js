@@ -18,9 +18,10 @@ exports.deleteSessionCookie = async (req, res) => {
 };
 
 exports.getAccessToken = async (req, res) => {
+	console.log("get access token reached");
 	try {
 		if (!req.query?.code) {
-			res.status(200).send({ success: false, data: "no code given" });
+			res.status(401).send({ success: false, data: "no code given" });
 		} else {
 			const response = await axios.post(
 				"https://github.com/login/oauth/access_token",
@@ -39,7 +40,7 @@ exports.getAccessToken = async (req, res) => {
 			const { access_token } = response.data;
 
 			if (!access_token) {
-				res.status(200).send({
+				res.status(401).send({
 					success: false,
 					data: "no access token given. code may have been invalid",
 				});

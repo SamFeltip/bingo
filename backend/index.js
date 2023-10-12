@@ -5,14 +5,19 @@ const cookieParser = require("cookie-parser");
 // for https
 const https = require("https");
 const fs = require("fs");
+const app = express();
+
 const key = fs.readFileSync("./key.pem");
 const cert = fs.readFileSync("./cert.pem");
 
-if (process.env.NODE_ENV !== "production") {
-	require("dotenv").config();
+if (process.env.NODE_ENV === "development") {
+	require("dotenv").config({ path: "./.env" });
 }
 
-const app = express();
+if (process.env.NODE_ENV === "production") {
+	require("dotenv").config({ path: "./.env.production" });
+}
+
 app.use(express.json());
 app.use(
 	cors({
@@ -24,14 +29,22 @@ app.use(
 app.use(cookieParser());
 
 // const {sequelize} = require("./db");
-const db = require("./db/models");
+const { sequelize, User } = require("./db/models");
 
 app.get("/", async (req, res) => {
-	console.log(
-		db.User.findAll().then((users) => {
-			res.json(users);
-		}),
-	);
+	console.log("backend reached");
+
+	sequelize
+		.authenticate()
+		.then(() => {
+			res.send("authenticated db successfully");
+			console.log("Connection has been established successfully.");
+		})
+		.catch((err) => {
+			res.send(`issue with db auth ${err}`);
+
+			console.error("Unable to connect to the database:", err);
+		});
 });
 
 const userRoutes = require("./routes/userRoutes");
@@ -55,5 +68,14 @@ const server = https.createServer({ key: key, cert: cert }, app);
 
 server.listen(port, () => {
 	console.log(`[server]: Server is running at https://localhost:${port}`);
+
+	sequelize
+		.authenticate()
+		.then(() => {
+			console.log("Connection has been established successfully.");
+		})
+		.catch((err) => {
+			console.error("Unable to connect to the database:", err);
+		});
 });
 // redirect the user to the home page, along with the access token
