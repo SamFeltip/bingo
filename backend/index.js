@@ -31,7 +31,7 @@ app.use(
 app.use(cookieParser());
 
 // const {sequelize} = require("./db");
-const { sequelize, User } = require("./db/models");
+const { sequelize } = require("./db/models");
 
 app.get("/", async (req, res) => {
 	console.log("backend reached");
@@ -68,16 +68,23 @@ const port = process.env.PORT || "4000";
 
 const server = https.createServer({ key: key, cert: cert }, app);
 
-server.listen(port, () => {
+server.listen(port, async () => {
 	console.log(`[server]: Server is running at https://localhost:${port}`);
 
-	sequelize
-		.authenticate()
-		.then(() => {
+	let isConnected = false;
+	let attempts = 0;
+
+	while (!isConnected && attempts < 10) {
+		try {
+			await sequelize.authenticate();
 			console.log("Connection has been established successfully.");
-		})
-		.catch((err) => {
+			isConnected = true;
+		} catch (err) {
 			console.error("Unable to connect to the database:", err);
-		});
+			attempts++;
+			// Wait for 1 second before trying again
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+		}
+	}
 });
 // redirect the user to the home page, along with the access token

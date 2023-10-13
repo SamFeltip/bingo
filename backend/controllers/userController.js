@@ -26,7 +26,8 @@ exports.getUsers = (req, res) => {
 			res.json(users);
 		})
 		.catch((err) => {
-			throw err;
+			console.error("an error has occurred", err);
+			res.status(500).json(err);
 		});
 };
 
