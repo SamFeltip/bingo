@@ -1,17 +1,35 @@
-#version: "3"
-#services:
-#  react-docker-image:
-#    container_name: react-docker-image
-#    image: react-docker-image
-#    restart: always
-#    build: .
-#    ports:
-#      - "4001:3001"
-#    environment:
-#      PORT: "3001"
-#    networks:
-#      - nginx-proxy-manager_default
-#
-#networks:
-#  nginx-proxy-manager_default:
-#    external: true
+version: '3'
+services:
+  client:
+    build: ./client # location of Dockerfile for React app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app # mount this path onto /app in container
+      - /app/node_modules # use node_modules from inside container
+    env_file:
+      - ./client/.env.production
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend # location of Dockerfile for Node.js Express backend
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./backend:/app # mount this path onto /app in container
+      - /app/node_modules # use node_modules from inside container
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - ./backend/.env.production
+    depends_on:
+      - db
+    command: ["./bin/wait-for-db.sh", "db:5432", "--", "npm", "run", "start:prod"]
+
+  db:
+    image: postgres:13 # use official postgres image
+    ports:
+      - '5432:5432'
+    env_file:
+      - ./backend/.env.production
