@@ -10,13 +10,7 @@ const app = express();
 const key = fs.readFileSync("./key.pem");
 const cert = fs.readFileSync("./cert.pem");
 
-if (process.env.NODE_ENV === "development") {
-	require("dotenv").config({ path: "./.env" });
-}
-
-if (process.env.NODE_ENV === "production") {
-	require("dotenv").config({ path: "./.env.production" });
-}
+require("dotenv").config({ path: "./.env.dev" });
 
 app.use(express.json());
 

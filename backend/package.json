@@ -2,10 +2,10 @@
 	"name": "backend",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "prod-index.js",
 	"scripts": {
-		"start:dev": "NODE_ENV=development nodemon .",
-		"start": "NODE_ENV=production node .",
+		"start:dev": "NODE_ENV=development nodemon dev-index.js",
+		"start": "NODE_ENV=production node prod-index.js",
 		"debug": "nodemon --inspect-brk .",
 		"test": "jest",
 		"db:seeds:up": "npx sequelize-cli db:seed:all",

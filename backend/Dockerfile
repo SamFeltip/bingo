@@ -27,4 +27,4 @@ ENV POSTGRES_DB=$POSTGRES_PASSWORD
 ENV POSTGRES_HOST=$POSTGRES_HOST
 
 
-CMD ["sh", "-c", "npm run db:migrate:up && npm run db:seeds:up && node index.js"]
+CMD ["sh", "-c", "npm run db:migrate:up && npm run db:seeds:up && node prod-index.js"]
