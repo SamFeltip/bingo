@@ -12,3 +12,5 @@
 /client/.env.local
 /backend/.env.production
 /client/.env.production
+docker-compose.yml
+docker-compose.yml

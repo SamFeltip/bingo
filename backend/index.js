@@ -49,6 +49,10 @@ app.get("/", async (req, res) => {
 		});
 });
 
+app.get("/text", async (req, res) => {
+	res.send("hello world!");
+})
+
 const userRoutes = require("./routes/userRoutes");
 app.use("/users", userRoutes);
 
@@ -69,7 +73,7 @@ const port = process.env.PORT || "4000";
 const server = https.createServer({ key: key, cert: cert }, app);
 
 server.listen(port, async () => {
-	console.log(`[server]: Server is running at https://localhost:${port}`);
+	console.log(`[server]: Server is running at ${[process.env.BACKEND_URL]}`);
 
 	let isConnected = false;
 	let attempts = 0;
