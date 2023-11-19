@@ -5,7 +5,6 @@
 /backend/keytmp.pem
 /backend/key.pem
 /backend/cert.pem
-/backend/db/config/config.js
 /backend/db/sequelizeData.json
 
 /backend/.env
